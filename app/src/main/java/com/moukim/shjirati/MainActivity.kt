@@ -32,7 +32,7 @@ private fun ShjiratiApp(repository: PlantRepositoryImpl) {
     if (addingPlant) {
         PlantFormScreen(
             onSave = { name, category, location, notes, interval, daysMask, hour, minute ->
-                vm.savePlant(name, category, location, notes, interval, daysMask, hour, minute)
+                vm.savePlant(name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
                 addingPlant = false
             },
             onBack = { addingPlant = false }
