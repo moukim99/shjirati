@@ -27,17 +27,32 @@ fun PlantDetailScreen(
     history: Flow<List<WateringLogEntity>>,
     onBack: () -> Unit,
     onWater: () -> Unit,
-    onEdit: () -> Unit
+    onEdit: () -> Unit,
+    onDelete: () -> Unit
 ) {
+    var confirmDelete by remember { mutableStateOf(false) }
     val logs by history.collectAsState(initial = emptyList())
     val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm").withZone(ZoneId.systemDefault())
+
+    if (confirmDelete) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            title = { Text("حذف النبتة؟") },
+            text = { Text("سيتم حذف النبتة من التطبيق. لا يمكن التراجع عن هذا الإجراء.") },
+            confirmButton = { TextButton(onClick = { confirmDelete = false; onDelete() }) { Text("حذف") } },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("إلغاء") } }
+        )
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(plant.name) },
                 navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, "رجوع") } },
-                actions = { IconButton(onClick = onEdit) { Icon(Icons.Default.Edit, "تعديل") } }
+                actions = {
+                    IconButton(onClick = onEdit) { Icon(Icons.Default.Edit, "تعديل") }
+                    TextButton(onClick = { confirmDelete = true }) { Text("حذف") }
+                }
             )
         }
     ) { padding ->
