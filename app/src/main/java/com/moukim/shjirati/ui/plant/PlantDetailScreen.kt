@@ -38,6 +38,7 @@ fun PlantDetailScreen(
     val logs by history.collectAsState(initial = emptyList())
     val imageBitmap = remember(plant.imageUri) { plant.imageUri?.let { runCatching { BitmapFactory.decodeFile(it) }.getOrNull() } }
     val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm").withZone(ZoneId.systemDefault())
+    val dueToday = WateringCalculator.isDueToday(plant)
 
     if (confirmDelete) {
         AlertDialog(
@@ -79,12 +80,12 @@ fun PlantDetailScreen(
                         }
                         plant.notes?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
                         HorizontalDivider()
-                        Text(scheduleSummary(plant), style = MaterialTheme.typography.bodyLarge)
+                        Surface(shape = MaterialTheme.shapes.large, color = if (dueToday) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant) { Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text(if (dueToday) "يحتاج إلى السقي اليوم" else "لا يحتاج إلى السقي الآن", style = MaterialTheme.typography.titleMedium); Text(scheduleSummary(plant), style = MaterialTheme.typography.bodyLarge) } }
                     }
                 }
             }
             item {
-                Button(onClick = onWater, Modifier.fillMaxWidth().height(60.dp)) {
+                Button(onClick = onWater, Modifier.fillMaxWidth().height(64.dp)) {
                     Icon(Icons.Default.WaterDrop, null)
                     Spacer(Modifier.width(10.dp))
                     Text("سقي الآن", style = MaterialTheme.typography.titleMedium)
