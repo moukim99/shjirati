@@ -53,6 +53,26 @@ class WateringCalculatorTest {
     }
 
     @Test
+    fun seasonal_interval_is_used_for_current_season() {
+        val today = LocalDate.of(2026, 7, 10)
+        val p = plant(interval = 10, lastWatered = today.minusDays(5)).copy(
+            seasonalScheduleEnabled = true,
+            summerIntervalDays = 5
+        )
+        assertTrue(WateringCalculator.isDueToday(p, today))
+    }
+
+    @Test
+    fun seasonal_interval_falls_back_to_base_when_missing() {
+        val today = LocalDate.of(2026, 7, 10)
+        val p = plant(interval = 7, lastWatered = today.minusDays(6)).copy(
+            seasonalScheduleEnabled = true,
+            summerIntervalDays = null
+        )
+        assertFalse(WateringCalculator.isDueToday(p, today))
+    }
+
+    @Test
     fun watered_today_is_not_due_again() {
         val today = LocalDate.of(2026, 10, 5)
         val mondayMask = 1 shl (today.dayOfWeek.value - 1)
