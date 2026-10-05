@@ -16,13 +16,21 @@ import com.moukim.shjirati.data.local.PlantEntity
 import com.moukim.shjirati.domain.WateringCalculator
 
 @Composable
-fun HomeScreen(plants: List<PlantEntity>, onAddPlant: () -> Unit, onWater: (PlantEntity) -> Unit, onSelectPlant: (PlantEntity) -> Unit) {
+fun HomeScreen(
+    plants: List<PlantEntity>,
+    onAddPlant: () -> Unit,
+    onWater: (PlantEntity) -> Unit,
+    onSelectPlant: (PlantEntity) -> Unit
+) {
     val due = plants.filter { WateringCalculator.isDueToday(it) }
-    Scaffold(floatingActionButton = {
-        FloatingActionButton(onClick = onAddPlant) {
-            Icon(Icons.Default.Add, contentDescription = "إضافة نبتة")
+
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddPlant) {
+                Icon(Icons.Default.Add, contentDescription = "إضافة نبتة")
+            }
         }
-    }) { padding ->
+    ) { padding ->
         LazyColumn(
             Modifier.fillMaxSize().padding(padding),
             contentPadding = PaddingValues(20.dp),
@@ -37,18 +45,55 @@ fun HomeScreen(plants: List<PlantEntity>, onAddPlant: () -> Unit, onWater: (Plan
                     style = MaterialTheme.typography.titleLarge
                 )
             }
-            if (due.isEmpty() && plants.isNotEmpty()) {\n                item { Text("كل نباتاتك", style = MaterialTheme.typography.headlineSmall) }\n                items(plants, key = { it.id }) { plant ->\n                    PlantCard(plant, onSelectPlant, onWater)\n                }\n            } else {\n                items(due, key = { it.id }) { plant ->
-                Card(Modifier.fillMaxWidth().clickable { onSelectPlant(plant) }) {
-                    Row(Modifier.fillMaxWidth().padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.WaterDrop, null, Modifier.size(34.dp))
-                        Spacer(Modifier.width(14.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(plant.name, style = MaterialTheme.typography.titleLarge)
-                            plant.location?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
+
+            if (due.isEmpty() && plants.isNotEmpty()) {
+                item { Text("كل نباتاتك", style = MaterialTheme.typography.headlineSmall) }
+                items(plants, key = { it.id }) { plant ->
+                    PlantCard(plant, onSelectPlant, onWater)
+                }
+            } else {
+                items(due, key = { it.id }) { plant ->
+                    PlantCard(plant, onSelectPlant, onWater)
+                }
+            }
+
+            if (plants.isEmpty()) {
+                item {
+                    Card(Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(24.dp)) {
+                            Text("ابدأ بإضافة أول نبتة.", style = MaterialTheme.typography.titleLarge)
+                            Spacer(Modifier.height(8.dp))
+                            Text(
+                                "سنذكّرك بموعد سقيها محلياً على هاتفك.",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
                         }
-                        Button(onClick = { onWater(plant) }) { Text("تم السقي") }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlantCard(
+    plant: PlantEntity,
+    onSelectPlant: (PlantEntity) -> Unit,
+    onWater: (PlantEntity) -> Unit
+) {
+    Card(Modifier.fillMaxWidth().clickable { onSelectPlant(plant) }) {
+        Row(
+            Modifier.fillMaxWidth().padding(18.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.WaterDrop, null, Modifier.size(34.dp))
+            Spacer(Modifier.width(14.dp))
+            Column(Modifier.weight(1f)) {
+                Text(plant.name, style = MaterialTheme.typography.titleLarge)
+                plant.location?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
+            }
+            Button(onClick = { onWater(plant) }) {
+                Text("تم السقي")
             }
         }
     }
