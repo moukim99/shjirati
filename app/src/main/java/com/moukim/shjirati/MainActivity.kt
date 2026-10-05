@@ -93,7 +93,8 @@ private fun ShjiratiApp(repository: PlantRepositoryImpl) {
         HomeScreen(
             plants = vm.plants.collectAsState().value,
             onAddPlant = { addingPlant = true },
-            onWater = vm::water
+            onWater = vm::water,
+            onSelectPlant = { selectedPlant = it }
         )
     }
 }
