@@ -1,5 +1,6 @@
 package com.moukim.shjirati.data.local
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
@@ -11,7 +12,8 @@ class ShjiratiConverters {
 
 @Database(
     entities = [PlantEntity::class, WateringLogEntity::class],
-    version = 1,
+    version = 2,
+    autoMigrations = [AutoMigration(from = 1, to = 2)],
     exportSchema = true
 )
 @androidx.room.TypeConverters(ShjiratiConverters::class)
