@@ -1,10 +1,16 @@
 package com.moukim.shjirati
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import android.content.pm.PackageManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moukim.shjirati.data.PlantRepositoryImpl
 import com.moukim.shjirati.data.local.DatabaseProvider
@@ -29,8 +35,25 @@ class MainActivity : ComponentActivity() {
 private fun ShjiratiApp(repository: PlantRepositoryImpl) {
     var addingPlant by remember { mutableStateOf(false) }
     val vm: HomeViewModel = viewModel(factory = HomeViewModel.factory(repository))
+    val context = LocalContext.current
+    var notificationPermissionRequested by rememberSaveable { mutableStateOf(false) }
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { }
 
     LaunchedEffect(vm.plants.value.size) {
+        if (
+            vm.plants.value.isNotEmpty() &&
+            Build.VERSION.SDK_INT >= 33 &&
+            !notificationPermissionRequested &&
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermissionRequested = true
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
         vm.scheduleAll(LocalContext.current)
     }
 
