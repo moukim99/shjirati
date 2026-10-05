@@ -7,6 +7,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import android.app.DatePickerDialog
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import java.io.File
+import java.io.FileOutputStream
+import java.time.LocalDate
 import com.moukim.shjirati.data.local.PlantCategory
 import java.time.DayOfWeek
 
@@ -14,12 +21,15 @@ import java.time.DayOfWeek
 @Composable
 fun PlantFormScreen(
     initialPlant: com.moukim.shjirati.data.local.PlantEntity? = null,
-    onSave: (String, PlantCategory, String?, String?, Int?, Int, Int, Int, Boolean, Int?, Int?, Int?, Int?) -> Unit,
+    onSave: (String, PlantCategory, String?, String?, String?, Long?, Int?, Int, Int, Int, Boolean, Int?, Int?, Int?, Int?) -> Unit,
     onBack: () -> Unit
 ) {
     var name by remember { mutableStateOf(initialPlant?.name.orEmpty()) }
     var location by remember { mutableStateOf(initialPlant?.location.orEmpty()) }
     var notes by remember { mutableStateOf(initialPlant?.notes.orEmpty()) }
+    var imageUri by remember { mutableStateOf(initialPlant?.imageUri) }
+    var plantedAt by remember { mutableStateOf(initialPlant?.plantedAtEpochMillis) }
+    val context = LocalContext.current
     var category by remember { mutableStateOf(initialPlant?.category ?: PlantCategory.TREE) }
     var useWeekdays by remember { mutableStateOf(initialPlant?.wateringDaysMask != 0) }
     var intervalText by remember { mutableStateOf((initialPlant?.wateringIntervalDays ?: 3).toString()) }
@@ -33,6 +43,19 @@ fun PlantFormScreen(
     var autumnInterval by remember { mutableStateOf(initialPlant?.autumnIntervalDays?.toString().orEmpty()) }
     var winterInterval by remember { mutableStateOf(initialPlant?.winterIntervalDays?.toString().orEmpty()) }
 
+    val imagePicker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) runCatching {
+            val file = File(context.filesDir, "plant_${System.currentTimeMillis()}.jpg")
+            context.contentResolver.openInputStream(uri)?.use { input -> FileOutputStream(file).use { output -> input.copyTo(output) } }
+            imageUri = file.absolutePath
+        }
+    }
+    fun showPlantingDatePicker() {
+        val current = plantedAt?.let { java.time.Instant.ofEpochMilli(it).atZone(java.time.ZoneId.systemDefault()).toLocalDate() } ?: LocalDate.now()
+        DatePickerDialog(context, { _, year, month, day ->
+            plantedAt = LocalDate.of(year, month + 1, day).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+        }, current.year, current.monthValue - 1, current.dayOfMonth).show()
+    }
     val timeState = rememberTimePickerState(
         initialHour = wateringHour,
         initialMinute = wateringMinute,
@@ -90,6 +113,15 @@ fun PlantFormScreen(
                 label = { Text("مكانها في الحديقة (اختياري)") },
                 singleLine = true
             )
+            OutlinedButton(onClick = { imagePicker.launch(ActivityResultContracts.PickVisualMedia.ImageOnly) }, Modifier.fillMaxWidth().height(56.dp)) {
+                Text(if (imageUri == null) "إضافة صورة للنبتة" else "تغيير صورة النبتة")
+            }
+            OutlinedButton(onClick = { showPlantingDatePicker() }, Modifier.fillMaxWidth().height(56.dp)) {
+                Text(plantedAt?.let {
+                    val date = java.time.Instant.ofEpochMilli(it).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+                    "تاريخ الغرس: %04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth)
+                } ?: "إضافة تاريخ الغرس")
+            }
             OutlinedTextField(
                 notes, { notes = it }, Modifier.fillMaxWidth(),
                 label = { Text("ملاحظات (اختياري)") },
@@ -210,6 +242,8 @@ fun PlantFormScreen(
                         category,
                         location.trim().ifBlank { null },
                         notes.trim().ifBlank { null },
+                        imageUri,
+                        plantedAt,
                         if (useWeekdays) null else interval,
                         mask,
                         wateringHour,
