@@ -25,7 +25,12 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
         wateringIntervalDays: Int?,
         wateringDaysMask: Int,
         wateringHour: Int,
-        wateringMinute: Int
+        wateringMinute: Int,
+        seasonalEnabled: Boolean,
+        springIntervalDays: Int?,
+        summerIntervalDays: Int?,
+        autumnIntervalDays: Int?,
+        winterIntervalDays: Int?
     ) {
         val now = System.currentTimeMillis()
         viewModelScope.launch {
@@ -40,6 +45,11 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
                     wateringDaysMask = wateringDaysMask,
                     wateringHour = wateringHour,
                     wateringMinute = wateringMinute,
+                    seasonalScheduleEnabled = seasonalEnabled,
+                    springIntervalDays = springIntervalDays,
+                    summerIntervalDays = summerIntervalDays,
+                    autumnIntervalDays = autumnIntervalDays,
+                    winterIntervalDays = winterIntervalDays,
                     createdAtEpochMillis = now,
                     updatedAtEpochMillis = now
                 )
