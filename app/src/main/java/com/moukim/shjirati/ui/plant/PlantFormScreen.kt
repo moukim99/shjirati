@@ -168,6 +168,27 @@ fun PlantFormScreen(
                 }
             }
 
+            HorizontalDivider()
+
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text("تغيير السقي حسب الفصل", style = MaterialTheme.typography.titleMedium)
+                    Text("اضبط عدد الأيام لكل فصل.", style = MaterialTheme.typography.bodyMedium)
+                }
+                Switch(checked = seasonalEnabled, onCheckedChange = { seasonalEnabled = it })
+            }
+
+            if (seasonalEnabled && !useWeekdays) {
+                Text("السقي كل كم يوم في كل فصل؟", style = MaterialTheme.typography.titleMedium)
+                SeasonField("الربيع", springInterval) { springInterval = it }
+                SeasonField("الصيف", summerInterval) { summerInterval = it }
+                SeasonField("الخريف", autumnInterval) { autumnInterval = it }
+                SeasonField("الشتاء", winterInterval) { winterInterval = it }
+            }
+
             OutlinedButton(
                 onClick = { showTimePicker = true },
                 Modifier.fillMaxWidth().height(56.dp)
@@ -191,7 +212,12 @@ fun PlantFormScreen(
                         if (useWeekdays) null else interval,
                         mask,
                         wateringHour,
-                        wateringMinute
+                        wateringMinute,
+                        seasonalEnabled && !useWeekdays,
+                        springInterval.toIntOrNull()?.coerceIn(1, 99),
+                        summerInterval.toIntOrNull()?.coerceIn(1, 99),
+                        autumnInterval.toIntOrNull()?.coerceIn(1, 99),
+                        winterInterval.toIntOrNull()?.coerceIn(1, 99)
                     )
                 },
                 enabled = name.isNotBlank() &&
@@ -221,4 +247,16 @@ private fun DayOfWeek.arabicLabel() = when (this) {
     DayOfWeek.FRIDAY -> "الجمعة"
     DayOfWeek.SATURDAY -> "السبت"
     DayOfWeek.SUNDAY -> "الأحد"
+}
+
+@Composable
+private fun SeasonField(label: String, value: String, onValueChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { if (it.all(Char::isDigit) && it.length <= 2) onValueChange(it) },
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(label) },
+        suffix = { Text("يوم") },
+        singleLine = true
+    )
 }
