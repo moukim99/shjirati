@@ -26,6 +26,7 @@ class MissedWateringReceiver : BroadcastReceiver() {
                 if (lastWatered != today && WateringCalculator.isDueToday(plant, today.minusDays(1))) {
                     WateringAlarmReceiver.showReminder(
                         context,
+                        plant.id,
                         plant.name,
                         plant.id.hashCode(),
                         "سقي فائت"
