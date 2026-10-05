@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 enum class PlantCategory { TREE, SEEDLING, VEGETABLE, OTHER }
 
-@Entity(tableName = "plants")
+@Entity(tableName = "plants", indices = [Index("category"), Index("name")])
 data class PlantEntity(
     @PrimaryKey val id: String,
     val name: String,
