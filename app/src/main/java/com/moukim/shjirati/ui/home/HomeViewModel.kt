@@ -17,25 +17,62 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
     val plants: StateFlow<List<PlantEntity>> = repository.observePlants()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    fun savePlant(name: String, category: PlantCategory, location: String?, notes: String?) {
+    fun savePlant(
+        name: String,
+        category: PlantCategory,
+        location: String?,
+        notes: String?,
+        wateringIntervalDays: Int?,
+        wateringDaysMask: Int,
+        wateringHour: Int,
+        wateringMinute: Int
+    ) {
         val now = System.currentTimeMillis()
         viewModelScope.launch {
-            repository.savePlant(PlantEntity(UUID.randomUUID().toString(), name, category, location = location, notes = notes, createdAtEpochMillis = now, updatedAtEpochMillis = now))
+            repository.savePlant(
+                PlantEntity(
+                    id = UUID.randomUUID().toString(),
+                    name = name,
+                    category = category,
+                    location = location,
+                    notes = notes,
+                    wateringIntervalDays = wateringIntervalDays,
+                    wateringDaysMask = wateringDaysMask,
+                    wateringHour = wateringHour,
+                    wateringMinute = wateringMinute,
+                    createdAtEpochMillis = now,
+                    updatedAtEpochMillis = now
+                )
+            )
         }
     }
 
     fun water(plant: PlantEntity) {
         val now = System.currentTimeMillis()
         viewModelScope.launch {
-            repository.logWatering(WateringLogEntity(UUID.randomUUID().toString(), plant.id, now, plant.wateringAmountMl, plant.wateringDurationMinutes))
-            repository.savePlant(plant.copy(lastWateredAtEpochMillis = now, updatedAtEpochMillis = now))
+            repository.logWatering(
+                WateringLogEntity(
+                    UUID.randomUUID().toString(),
+                    plant.id,
+                    now,
+                    plant.wateringAmountMl,
+                    plant.wateringDurationMinutes
+                )
+            )
+            repository.savePlant(
+                plant.copy(
+                    lastWateredAtEpochMillis = now,
+                    updatedAtEpochMillis = now
+                )
+            )
         }
     }
 
     companion object {
         fun factory(repository: PlantRepository) = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T = HomeViewModel(repository) as T
+            override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                HomeViewModel(repository) as T
         }
     }
 }
