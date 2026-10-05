@@ -29,14 +29,19 @@ object WateringNotificationScheduler {
 
     fun cancel(context: Context, plantId: String) {
         val intent = Intent(context, WateringAlarmReceiver::class.java)
+        val alarmManager = context.getSystemService(AlarmManager::class.java)
         val pending = PendingIntent.getBroadcast(
-            context,
-            requestCode(plantId),
-            intent,
+            context, requestCode(plantId), intent,
             PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
-        ) ?: return
-        context.getSystemService(AlarmManager::class.java).cancel(pending)
-        pending.cancel()
+        )
+        pending?.let { alarmManager.cancel(it); it.cancel() }
+        val missed = PendingIntent.getBroadcast(
+            context, MISSED_REQUEST_BASE + plantId.hashCode().and(0x7FFF),
+            Intent(context, MissedWateringReceiver::class.java)
+                .putExtra(WateringAlarmReceiver.EXTRA_PLANT_ID, plantId),
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+        missed?.let { alarmManager.cancel(it); it.cancel() }
     }
 
     private fun pendingIntent(context: Context, plant: PlantEntity): PendingIntent =
