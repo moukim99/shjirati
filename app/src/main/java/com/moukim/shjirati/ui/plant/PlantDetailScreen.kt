@@ -1,6 +1,10 @@
 package com.moukim.shjirati.ui.plant
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -32,6 +36,7 @@ fun PlantDetailScreen(
 ) {
     var confirmDelete by remember { mutableStateOf(false) }
     val logs by history.collectAsState(initial = emptyList())
+    val imageBitmap = remember(plant.imageUri) { plant.imageUri?.let { runCatching { BitmapFactory.decodeFile(it) }.getOrNull() } }
     val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm").withZone(ZoneId.systemDefault())
 
     if (confirmDelete) {
@@ -64,9 +69,14 @@ fun PlantDetailScreen(
             item {
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        imageBitmap?.let { bitmap -> Image(bitmap.asImageBitmap(), contentDescription = "صورة النبتة", modifier = Modifier.fillMaxWidth().height(220.dp), contentScale = ContentScale.Crop) }
                         Text(plant.name, style = MaterialTheme.typography.headlineMedium)
                         Text(plant.category.arabicLabel(), style = MaterialTheme.typography.titleMedium)
                         plant.location?.let { Text("المكان: $it", style = MaterialTheme.typography.bodyLarge) }
+                        plant.plantedAtEpochMillis?.let { epoch ->
+                            val date = Instant.ofEpochMilli(epoch).atZone(ZoneId.systemDefault()).toLocalDate()
+                            Text("تاريخ الغرس: %04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth), style = MaterialTheme.typography.bodyLarge)
+                        }
                         plant.notes?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
                         HorizontalDivider()
                         Text(scheduleSummary(plant), style = MaterialTheme.typography.bodyLarge)
