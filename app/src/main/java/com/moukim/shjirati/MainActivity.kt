@@ -17,6 +17,7 @@ import com.moukim.shjirati.data.local.DatabaseProvider
 import com.moukim.shjirati.ui.home.HomeScreen
 import com.moukim.shjirati.ui.home.HomeViewModel
 import com.moukim.shjirati.ui.plant.PlantFormScreen
+import com.moukim.shjirati.ui.plant.PlantDetailScreen
 import com.moukim.shjirati.ui.theme.ShjiratiTheme
 
 class MainActivity : ComponentActivity() {
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun ShjiratiApp(repository: PlantRepositoryImpl) {
-    var addingPlant by remember { mutableStateOf(false) }
+    var addingPlant by remember { mutableStateOf(false) }\n    var selectedPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
     val vm: HomeViewModel = viewModel(factory = HomeViewModel.factory(repository))
     val context = LocalContext.current
     var notificationPermissionRequested by rememberSaveable { mutableStateOf(false) }
@@ -57,7 +58,7 @@ private fun ShjiratiApp(repository: PlantRepositoryImpl) {
         vm.scheduleAll(LocalContext.current)
     }
 
-    if (addingPlant) {
+    if (selectedPlant != null) {\n        val plant = selectedPlant!!\n        PlantDetailScreen(\n            plant = plant,\n            history = repository.observeWateringHistory(plant.id),\n            onBack = { selectedPlant = null },\n            onWater = { vm.water(plant) },\n            onEdit = { }\n        )\n    } else if (addingPlant) {
         PlantFormScreen(
             onSave = { name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
                 vm.savePlant(name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
