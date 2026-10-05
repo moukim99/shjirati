@@ -15,7 +15,7 @@ import com.moukim.shjirati.data.local.PlantEntity
 import com.moukim.shjirati.domain.WateringCalculator
 
 @Composable
-fun HomeScreen(plants: List<PlantEntity>, onAddPlant: () -> Unit, onWater: (PlantEntity) -> Unit) {
+fun HomeScreen(plants: List<PlantEntity>, onAddPlant: () -> Unit, onWater: (PlantEntity) -> Unit, onSelectPlant: (PlantEntity) -> Unit) {
     val due = plants.filter { WateringCalculator.isDueToday(it) }
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = onAddPlant) {
@@ -37,7 +37,7 @@ fun HomeScreen(plants: List<PlantEntity>, onAddPlant: () -> Unit, onWater: (Plan
                 )
             }
             items(due, key = { it.id }) { plant ->
-                Card(Modifier.fillMaxWidth()) {
+                Card(Modifier.fillMaxWidth().clickable { onSelectPlant(plant) }) {
                     Row(Modifier.fillMaxWidth().padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.WaterDrop, null, Modifier.size(34.dp))
                         Spacer(Modifier.width(14.dp))
