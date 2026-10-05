@@ -69,6 +69,8 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
         category: PlantCategory,
         location: String?,
         notes: String?,
+        imageUri: String?,
+        plantedAtEpochMillis: Long?,
         wateringIntervalDays: Int?,
         wateringDaysMask: Int,
         wateringHour: Int,
