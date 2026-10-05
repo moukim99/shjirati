@@ -1,5 +1,6 @@
 package com.moukim.shjirati.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -36,7 +37,7 @@ fun HomeScreen(plants: List<PlantEntity>, onAddPlant: () -> Unit, onWater: (Plan
                     style = MaterialTheme.typography.titleLarge
                 )
             }
-            items(due, key = { it.id }) { plant ->
+            if (due.isEmpty() && plants.isNotEmpty()) {\n                item { Text("كل نباتاتك", style = MaterialTheme.typography.headlineSmall) }\n                items(plants, key = { it.id }) { plant ->\n                    PlantCard(plant, onSelectPlant, onWater)\n                }\n            } else {\n                items(due, key = { it.id }) { plant ->
                 Card(Modifier.fillMaxWidth().clickable { onSelectPlant(plant) }) {
                     Row(Modifier.fillMaxWidth().padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.WaterDrop, null, Modifier.size(34.dp))
