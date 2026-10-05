@@ -59,6 +59,53 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
         }
     }
 
+    fun updatePlant(
+        plant: PlantEntity,
+        name: String,
+        category: PlantCategory,
+        location: String?,
+        notes: String?,
+        wateringIntervalDays: Int?,
+        wateringDaysMask: Int,
+        wateringHour: Int,
+        wateringMinute: Int,
+        seasonalEnabled: Boolean,
+        springIntervalDays: Int?,
+        summerIntervalDays: Int?,
+        autumnIntervalDays: Int?,
+        winterIntervalDays: Int?
+    ) {
+        viewModelScope.launch {
+            val updated = plant.copy(
+                name = name, category = category, location = location, notes = notes,
+                wateringIntervalDays = wateringIntervalDays, wateringDaysMask = wateringDaysMask,
+                wateringHour = wateringHour, wateringMinute = wateringMinute,
+                seasonalScheduleEnabled = seasonalEnabled,
+                springIntervalDays = springIntervalDays, summerIntervalDays = summerIntervalDays,
+                autumnIntervalDays = autumnIntervalDays, winterIntervalDays = winterIntervalDays,
+                updatedAtEpochMillis = System.currentTimeMillis()
+            )
+            repository.savePlant(updated)
+            currentContext?.let { context ->
+                WateringNotificationScheduler.cancel(context, plant.id)
+                WateringNotificationScheduler.schedule(context, updated)
+            }
+        }
+    }
+
+    fun deletePlant(context: Context, plant: PlantEntity) {
+        viewModelScope.launch {
+            WateringNotificationScheduler.cancel(context, plant.id)
+            repository.deletePlant(plant)
+        }
+    }
+
+    private var currentContext: Context? = null
+
+    fun attachContext(context: Context) {
+        currentContext = context.applicationContext
+    }
+
     fun scheduleAll(context: Context) {
         plants.value.forEach { WateringNotificationScheduler.schedule(context, it) }
     }
