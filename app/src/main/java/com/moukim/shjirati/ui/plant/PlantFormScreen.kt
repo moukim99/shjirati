@@ -13,24 +13,25 @@ import java.time.DayOfWeek
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantFormScreen(
+    initialPlant: com.moukim.shjirati.data.local.PlantEntity? = null,
     onSave: (String, PlantCategory, String?, String?, Int?, Int, Int, Int, Boolean, Int?, Int?, Int?, Int?) -> Unit,
     onBack: () -> Unit
 ) {
-    var name by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf(PlantCategory.TREE) }
-    var useWeekdays by remember { mutableStateOf(false) }
-    var intervalText by remember { mutableStateOf("3") }
-    var selectedDays by remember { mutableStateOf(setOf(DayOfWeek.MONDAY, DayOfWeek.THURSDAY)) }
+    var name by remember { mutableStateOf(initialPlant?.name.orEmpty()) }
+    var location by remember { mutableStateOf(initialPlant?.location.orEmpty()) }
+    var notes by remember { mutableStateOf(initialPlant?.notes.orEmpty()) }
+    var category by remember { mutableStateOf(initialPlant?.category ?: PlantCategory.TREE) }
+    var useWeekdays by remember { mutableStateOf(initialPlant?.wateringDaysMask != 0) }
+    var intervalText by remember { mutableStateOf((initialPlant?.wateringIntervalDays ?: 3).toString()) }
+    var selectedDays by remember { mutableStateOf(initialPlant?.wateringDaysMask?.let { mask -> DayOfWeek.entries.filter { mask and (1 shl (it.value - 1)) != 0 }.toSet() } ?: setOf(DayOfWeek.MONDAY, DayOfWeek.THURSDAY)) }
     var showTimePicker by remember { mutableStateOf(false) }
-    var wateringHour by remember { mutableIntStateOf(18) }
-    var wateringMinute by remember { mutableIntStateOf(0) }
-    var seasonalEnabled by remember { mutableStateOf(false) }
-    var springInterval by remember { mutableStateOf("") }
-    var summerInterval by remember { mutableStateOf("") }
-    var autumnInterval by remember { mutableStateOf("") }
-    var winterInterval by remember { mutableStateOf("") }
+    var wateringHour by remember { mutableIntStateOf(initialPlant?.wateringHour ?: 18) }
+    var wateringMinute by remember { mutableIntStateOf(initialPlant?.wateringMinute ?: 0) }
+    var seasonalEnabled by remember { mutableStateOf(initialPlant?.seasonalScheduleEnabled ?: false) }
+    var springInterval by remember { mutableStateOf(initialPlant?.springIntervalDays?.toString().orEmpty()) }
+    var summerInterval by remember { mutableStateOf(initialPlant?.summerIntervalDays?.toString().orEmpty()) }
+    var autumnInterval by remember { mutableStateOf(initialPlant?.autumnIntervalDays?.toString().orEmpty()) }
+    var winterInterval by remember { mutableStateOf(initialPlant?.winterIntervalDays?.toString().orEmpty()) }
 
     val timeState = rememberTimePickerState(
         initialHour = wateringHour,
@@ -59,7 +60,7 @@ fun PlantFormScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("إضافة نبتة") },
+                title = { Text(if (initialPlant == null) "إضافة نبتة" else "تعديل النبتة") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("رجوع") } }
             )
         }
@@ -224,7 +225,7 @@ fun PlantFormScreen(
                     (useWeekdays && selectedDays.isNotEmpty() || !useWeekdays && intervalText.toIntOrNull()?.let { it > 0 } == true),
                 Modifier.fillMaxWidth().height(60.dp)
             ) {
-                Text("حفظ النبتة", style = MaterialTheme.typography.titleMedium)
+                Text(if (initialPlant == null) "حفظ النبتة" else "حفظ التعديلات", style = MaterialTheme.typography.titleMedium)
             }
 
             Spacer(Modifier.height(12.dp))
