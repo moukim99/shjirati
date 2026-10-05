@@ -3,7 +3,7 @@ package com.moukim.shjirati.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "watering_logs")
+@Entity(tableName = "watering_logs", indices = [Index("plantId"), Index("wateredAtEpochMillis")])
 data class WateringLogEntity(
     @PrimaryKey val id: String,
     val plantId: String,
