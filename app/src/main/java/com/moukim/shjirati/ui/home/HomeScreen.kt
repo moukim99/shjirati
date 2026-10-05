@@ -26,8 +26,8 @@ fun HomeScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddPlant) {
-                Icon(Icons.Default.Add, contentDescription = "إضافة نبتة")
+            ExtendedFloatingActionButton(onClick = onAddPlant, text = { Text("إضافة نبتة") }, icon = { Icon(Icons.Default.Add, contentDescription = null) }) {
+                Icon(Icons.Default.Add, contentDescription = null)
             }
         }
     ) { padding ->
@@ -81,9 +81,10 @@ private fun PlantCard(
     onSelectPlant: (PlantEntity) -> Unit,
     onWater: (PlantEntity) -> Unit
 ) {
-    Card(Modifier.fillMaxWidth().clickable { onSelectPlant(plant) }) {
+    Card(Modifier.fillMaxWidth().clickable { onSelectPlant(plant) }, colors = CardDefaults.cardColors(containerColor = if (WateringCalculator.isDueToday(plant)) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface)) {
+        Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(
-            Modifier.fillMaxWidth().padding(18.dp),
+            Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(Icons.Default.WaterDrop, null, Modifier.size(34.dp))
@@ -92,7 +93,7 @@ private fun PlantCard(
                 Text(plant.name, style = MaterialTheme.typography.titleLarge)
                 plant.location?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
             }
-            Button(onClick = { onWater(plant) }) {
+            Button(onClick = { onWater(plant) }, Modifier.fillMaxWidth().height(52.dp)) {
                 Text("تم السقي")
             }
         }
