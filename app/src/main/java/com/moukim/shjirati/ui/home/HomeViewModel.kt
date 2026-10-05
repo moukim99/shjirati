@@ -3,6 +3,8 @@ package com.moukim.shjirati.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import android.content.Context
+import com.moukim.shjirati.notifications.WateringNotificationScheduler
 import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
 import com.moukim.shjirati.data.local.WateringLogEntity
@@ -55,6 +57,10 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
                 )
             )
         }
+    }
+
+    fun scheduleAll(context: Context) {
+        plants.value.forEach { WateringNotificationScheduler.schedule(context, it) }
     }
 
     fun water(plant: PlantEntity) {
