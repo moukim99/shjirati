@@ -12,7 +12,6 @@ object WateringCalculator {
             Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
         }
 
-        // Never show a plant as due again on the same day after it was watered.
         if (lastWatered == today) return false
 
         if (plant.wateringDaysMask != 0) {
@@ -20,10 +19,21 @@ object WateringCalculator {
             return plant.wateringDaysMask and bit != 0
         }
 
-        val interval = plant.wateringIntervalDays ?: return false
+        val interval = intervalFor(plant, today) ?: return false
         if (lastWatered == null) return true
 
         return !today.isBefore(lastWatered.plusDays(interval.toLong()))
+    }
+
+    fun intervalFor(plant: PlantEntity, date: LocalDate): Int? {
+        if (!plant.seasonalScheduleEnabled) return plant.wateringIntervalDays
+
+        return when (currentSeason(date)) {
+            Season.SPRING -> plant.springIntervalDays ?: plant.wateringIntervalDays
+            Season.SUMMER -> plant.summerIntervalDays ?: plant.wateringIntervalDays
+            Season.AUTUMN -> plant.autumnIntervalDays ?: plant.wateringIntervalDays
+            Season.WINTER -> plant.winterIntervalDays ?: plant.wateringIntervalDays
+        }
     }
 
     fun weekdayMask(days: Set<DayOfWeek>): Int =
