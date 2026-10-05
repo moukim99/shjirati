@@ -1,6 +1,7 @@
 package com.moukim.shjirati.data.local
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 enum class PlantCategory { TREE, SEEDLING, VEGETABLE, OTHER }
