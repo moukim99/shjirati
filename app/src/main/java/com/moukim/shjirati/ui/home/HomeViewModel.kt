@@ -24,6 +24,8 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
         category: PlantCategory,
         location: String?,
         notes: String?,
+        imageUri: String?,
+        plantedAtEpochMillis: Long?,
         wateringIntervalDays: Int?,
         wateringDaysMask: Int,
         wateringHour: Int,
@@ -43,6 +45,8 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
                     category = category,
                     location = location,
                     notes = notes,
+                    imageUri = imageUri,
+                    plantedAtEpochMillis = plantedAtEpochMillis,
                     wateringIntervalDays = wateringIntervalDays,
                     wateringDaysMask = wateringDaysMask,
                     wateringHour = wateringHour,
@@ -78,6 +82,7 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
         viewModelScope.launch {
             val updated = plant.copy(
                 name = name, category = category, location = location, notes = notes,
+                imageUri = imageUri, plantedAtEpochMillis = plantedAtEpochMillis,
                 wateringIntervalDays = wateringIntervalDays, wateringDaysMask = wateringDaysMask,
                 wateringHour = wateringHour, wateringMinute = wateringMinute,
                 seasonalScheduleEnabled = seasonalEnabled,
