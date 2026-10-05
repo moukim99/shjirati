@@ -24,14 +24,14 @@ class WateringAlarmReceiver : BroadcastReceiver() {
         const val EXTRA_SNOOZE_ACTION = "snooze_action"
         private const val CHANNEL_ID = "watering_reminders"
 
-        fun showReminder(context: Context, name: String, id: Int, title: String = "وقت سقي النباتات") {
+        fun showReminder(context: Context, plantId: String, name: String, id: Int, title: String = "وقت سقي النباتات") {
             createChannel(context)
             if (android.os.Build.VERSION.SDK_INT >= 33 &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
             ) return
 
             val snoozeIntent = Intent(context, SnoozeReceiver::class.java)
-                .putExtra(EXTRA_PLANT_ID, id.toString())
+                .putExtra(EXTRA_PLANT_ID, plantId)
                 .putExtra(EXTRA_SNOOZE_ACTION, true)
             val snoozePending = PendingIntent.getBroadcast(
                 context,
@@ -85,7 +85,7 @@ class WateringAlarmReceiver : BroadcastReceiver() {
             try {
                 val plant = DatabaseProvider.get(context).dao().getPlant(plantId)
                 if (plant != null) {
-                    showReminder(context, plant.name, plant.id.hashCode())
+                    showReminder(context, plant.id, plant.name, plant.id.hashCode())
                     WateringNotificationScheduler.schedule(context, plant)
                 }
             } finally {
