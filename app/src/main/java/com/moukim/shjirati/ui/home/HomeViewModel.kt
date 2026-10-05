@@ -3,22 +3,39 @@ package com.moukim.shjirati.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
+import com.moukim.shjirati.data.local.WateringLogEntity
 import com.moukim.shjirati.domain.PlantRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.util.UUID
 
-class HomeViewModel(repository: PlantRepository) : ViewModel() {
+class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
     val plants: StateFlow<List<PlantEntity>> = repository.observePlants()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    fun savePlant(name: String, category: PlantCategory, location: String?, notes: String?) {
+        val now = System.currentTimeMillis()
+        viewModelScope.launch {
+            repository.savePlant(PlantEntity(UUID.randomUUID().toString(), name, category, location = location, notes = notes, createdAtEpochMillis = now, updatedAtEpochMillis = now))
+        }
+    }
+
+    fun water(plant: PlantEntity) {
+        val now = System.currentTimeMillis()
+        viewModelScope.launch {
+            repository.logWatering(WateringLogEntity(UUID.randomUUID().toString(), plant.id, now, plant.wateringAmountMl, plant.wateringDurationMinutes))
+            repository.savePlant(plant.copy(lastWateredAtEpochMillis = now, updatedAtEpochMillis = now))
+        }
+    }
+
     companion object {
-        fun factory(repository: PlantRepository): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                    HomeViewModel(repository) as T
-            }
+        fun factory(repository: PlantRepository) = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T = HomeViewModel(repository) as T
+        }
     }
 }
