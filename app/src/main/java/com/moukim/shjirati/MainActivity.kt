@@ -34,9 +34,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun ShjiratiApp(repository: PlantRepositoryImpl) {
-    var addingPlant by remember { mutableStateOf(false) }\n    var selectedPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
+    var addingPlant by remember { mutableStateOf(false) }
+    var editingPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
+    var selectedPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
     val vm: HomeViewModel = viewModel(factory = HomeViewModel.factory(repository))
     val context = LocalContext.current
+    vm.attachContext(context)
     var notificationPermissionRequested by rememberSaveable { mutableStateOf(false) }
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -58,7 +61,17 @@ private fun ShjiratiApp(repository: PlantRepositoryImpl) {
         vm.scheduleAll(LocalContext.current)
     }
 
-    if (selectedPlant != null) {\n        val plant = selectedPlant!!\n        PlantDetailScreen(\n            plant = plant,\n            history = repository.observeWateringHistory(plant.id),\n            onBack = { selectedPlant = null },\n            onWater = { vm.water(plant) },\n            onEdit = { }\n        )\n    } else if (addingPlant) {
+    if (editingPlant != null) {
+        val plant = editingPlant!!
+        PlantFormScreen(
+            initialPlant = plant,
+            onSave = { name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
+                vm.updatePlant(plant, name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
+                editingPlant = null
+            },
+            onBack = { editingPlant = null }
+        )
+    } else if (selectedPlant != null) {\n        val plant = selectedPlant!!\n        PlantDetailScreen(\n            plant = plant,\n            history = repository.observeWateringHistory(plant.id),\n            onBack = { selectedPlant = null },\n            onWater = { vm.water(plant) },\n            onEdit = { editingPlant = plant; selectedPlant = null },\n        )\n    } else if (addingPlant) {
         PlantFormScreen(
             onSave = { name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
                 vm.savePlant(name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
