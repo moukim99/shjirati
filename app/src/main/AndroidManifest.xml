@@ -11,6 +11,12 @@
             android:name=".notifications.WateringAlarmReceiver"
             android:exported="false" />
         <receiver
+            android:name=".notifications.SnoozeReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".notifications.MissedWateringReceiver"
+            android:exported="false" />
+        <receiver
             android:name=".notifications.BootReceiver"
             android:enabled="true"
             android:exported="true">
