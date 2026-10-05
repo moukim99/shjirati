@@ -16,7 +16,7 @@ class SnoozeReceiver : BroadcastReceiver() {
             try {
                 val plant = DatabaseProvider.get(context).dao().getPlant(plantId)
                 if (plant != null) {
-                    WateringAlarmReceiver.showReminder(context, plant.name, plant.id.hashCode(), "تذكير مؤجل")
+                    WateringAlarmReceiver.showReminder(context, plant.id, plant.name, plant.id.hashCode(), "تذكير مؤجل")
                 }
             } finally {
                 pendingResult.finish()
