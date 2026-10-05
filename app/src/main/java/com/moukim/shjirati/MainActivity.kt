@@ -65,16 +65,26 @@ private fun ShjiratiApp(repository: PlantRepositoryImpl) {
         val plant = editingPlant!!
         PlantFormScreen(
             initialPlant = plant,
-            onSave = { name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
-                vm.updatePlant(plant, name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
+            onSave = { name, category, location, notes, imageUri, plantedAt, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
+                vm.updatePlant(plant, name, category, location, notes, imageUri, plantedAt, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
                 editingPlant = null
             },
             onBack = { editingPlant = null }
         )
-    } else if (selectedPlant != null) {\n        val plant = selectedPlant!!\n        PlantDetailScreen(\n            plant = plant,\n            history = repository.observeWateringHistory(plant.id),\n            onBack = { selectedPlant = null },\n            onWater = { vm.water(plant) },\n            onEdit = { editingPlant = plant; selectedPlant = null },\n        )\n    } else if (addingPlant) {
+    } else if (selectedPlant != null) {
+        val plant = selectedPlant!!
+        PlantDetailScreen(
+            plant = plant,
+            history = repository.observeWateringHistory(plant.id),
+            onBack = { selectedPlant = null },
+            onWater = { vm.water(plant) },
+            onEdit = { editingPlant = plant; selectedPlant = null },
+            onDelete = { vm.deletePlant(context, plant); selectedPlant = null }
+        )
+    } else if (addingPlant) {
         PlantFormScreen(
-            onSave = { name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
-                vm.savePlant(name, category, location, notes, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
+            onSave = { name, category, location, notes, imageUri, plantedAt, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
+                vm.savePlant(name, category, location, notes, imageUri, plantedAt, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
                 addingPlant = false
             },
             onBack = { addingPlant = false }
