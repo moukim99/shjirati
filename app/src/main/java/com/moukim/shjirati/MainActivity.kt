@@ -28,10 +28,11 @@ class MainActivity : ComponentActivity() {
 private fun ShjiratiApp(repository: PlantRepositoryImpl) {
     var addingPlant by remember { mutableStateOf(false) }
     val vm: HomeViewModel = viewModel(factory = HomeViewModel.factory(repository))
+
     if (addingPlant) {
         PlantFormScreen(
-            onSave = { name, category, location, notes ->
-                vm.savePlant(name, category, location, notes)
+            onSave = { name, category, location, notes, interval, daysMask, hour, minute ->
+                vm.savePlant(name, category, location, notes, interval, daysMask, hour, minute)
                 addingPlant = false
             },
             onBack = { addingPlant = false }
