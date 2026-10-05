@@ -13,7 +13,7 @@ import java.time.DayOfWeek
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantFormScreen(
-    onSave: (String, PlantCategory, String?, String?, Int?, Int, Int, Int) -> Unit,
+    onSave: (String, PlantCategory, String?, String?, Int?, Int, Int, Int, Boolean, Int?, Int?, Int?, Int?) -> Unit,
     onBack: () -> Unit
 ) {
     var name by remember { mutableStateOf("") }
@@ -26,6 +26,11 @@ fun PlantFormScreen(
     var showTimePicker by remember { mutableStateOf(false) }
     var wateringHour by remember { mutableIntStateOf(18) }
     var wateringMinute by remember { mutableIntStateOf(0) }
+    var seasonalEnabled by remember { mutableStateOf(false) }
+    var springInterval by remember { mutableStateOf("") }
+    var summerInterval by remember { mutableStateOf("") }
+    var autumnInterval by remember { mutableStateOf("") }
+    var winterInterval by remember { mutableStateOf("") }
 
     val timeState = rememberTimePickerState(
         initialHour = wateringHour,
