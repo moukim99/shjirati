@@ -111,4 +111,32 @@ object ImageUtils {
             outputFile.absolutePath
         }.getOrNull()
     }
+
+    fun loadThumbnailBitmap(path: String, maxDimension: Int = 360): Bitmap? {
+        return runCatching {
+            val file = File(path)
+            if (!file.exists()) return null
+
+            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeFile(path, options)
+
+            val originalWidth = options.outWidth
+            val originalHeight = options.outHeight
+            if (originalWidth <= 0 || originalHeight <= 0) return null
+
+            var sampleSize = 1
+            if (originalWidth > maxDimension || originalHeight > maxDimension) {
+                val halfWidth = originalWidth / 2
+                val halfHeight = originalHeight / 2
+                while ((halfWidth / sampleSize) >= maxDimension || (halfHeight / sampleSize) >= maxDimension) {
+                    sampleSize *= 2
+                }
+            }
+
+            val decodeOptions = BitmapFactory.Options().apply {
+                inSampleSize = sampleSize
+            }
+            BitmapFactory.decodeFile(path, decodeOptions)
+        }.getOrNull()
+    }
 }

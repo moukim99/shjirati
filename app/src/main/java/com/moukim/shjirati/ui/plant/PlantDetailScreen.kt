@@ -1,6 +1,5 @@
 package com.moukim.shjirati.ui.plant
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -27,10 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
 import com.moukim.shjirati.data.local.WateringLogEntity
+import com.moukim.shjirati.domain.PlantAgeCalculator
 import com.moukim.shjirati.domain.WateringCalculator
+import com.moukim.shjirati.util.ImageUtils
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.ZoneId
@@ -53,7 +55,7 @@ fun PlantDetailScreen(
     var selectedImageIndex by remember { mutableIntStateOf(0) }
     val currentPath = imagePaths.getOrNull(selectedImageIndex) ?: imagePaths.firstOrNull()
     val mainBitmap = remember(currentPath) {
-        currentPath?.let { runCatching { BitmapFactory.decodeFile(it) }.getOrNull() }
+        currentPath?.let { ImageUtils.loadThumbnailBitmap(it, maxDimension = 1080) }
     }
     
     val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm").withZone(ZoneId.systemDefault())
@@ -97,18 +99,27 @@ fun PlantDetailScreen(
                         )
                     }
 
-                    Text(
-                        text = plant.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        textAlign = TextAlign.Center,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 8.dp)
-                    )
+                    ) {
+                        if (plant.icon != null) {
+                            Text(text = plant.icon, fontSize = 20.sp)
+                            Spacer(modifier = Modifier.width(6.dp))
+                        }
+                        Text(
+                            text = plant.name,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically
@@ -162,7 +173,7 @@ fun PlantDetailScreen(
                                         items(imagePaths.size) { idx ->
                                             val path = imagePaths[idx]
                                             val thumbBitmap = remember(path) {
-                                                runCatching { BitmapFactory.decodeFile(path) }.getOrNull()
+                                                ImageUtils.loadThumbnailBitmap(path, maxDimension = 180)
                                             }
                                             val isSelected = idx == selectedImageIndex
                                             if (thumbBitmap != null) {
@@ -186,16 +197,50 @@ fun PlantDetailScreen(
                                 }
                             }
                         }
-                        Text(plant.name, style = MaterialTheme.typography.headlineMedium)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            if (plant.icon != null) {
+                                Text(plant.icon, fontSize = 28.sp)
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
+                            Text(plant.name, style = MaterialTheme.typography.headlineMedium)
+                        }
+
                         Text(plant.category.arabicLabel(), style = MaterialTheme.typography.titleMedium)
+
                         plant.location?.let { Text("المكان: $it", style = MaterialTheme.typography.bodyLarge) }
+
                         plant.plantedAtEpochMillis?.let { epoch ->
                             val date = Instant.ofEpochMilli(epoch).atZone(ZoneId.systemDefault()).toLocalDate()
                             Text("تاريخ الغرس: %04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth), style = MaterialTheme.typography.bodyLarge)
+
+                            val ageText = PlantAgeCalculator.calculateAge(epoch, plant.category)
+                            if (ageText != null) {
+                                Text("العمر الحالي: $ageText", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                            }
                         }
-                        plant.notes?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
+
+                        plant.expectedDateEpochMillis?.let { epoch ->
+                            val date = Instant.ofEpochMilli(epoch).atZone(ZoneId.systemDefault()).toLocalDate()
+                            val label = if (plant.category == PlantCategory.TREE) "تاريخ الحصاد المتوقع" else "تاريخ الإنبات المتوقع"
+                            Text("$label: %04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                        }
+
+                        plant.notes?.let { Text("ملاحظات: $it", style = MaterialTheme.typography.bodyLarge) }
+
                         HorizontalDivider()
-                        Surface(shape = MaterialTheme.shapes.large, color = if (dueToday) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant) { Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text(if (dueToday) "يحتاج إلى السقي اليوم" else "لا يحتاج إلى السقي الآن", style = MaterialTheme.typography.titleMedium); Text(scheduleSummary(plant), style = MaterialTheme.typography.bodyLarge) } }
+
+                        Surface(
+                            shape = MaterialTheme.shapes.large,
+                            color = if (dueToday) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            Column(
+                                Modifier.fillMaxWidth().padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Text(if (dueToday) "يحتاج إلى السقي اليوم" else "لا يحتاج إلى السقي الآن", style = MaterialTheme.typography.titleMedium)
+                                Text(scheduleSummary(plant), style = MaterialTheme.typography.bodyLarge)
+                            }
+                        }
                     }
                 }
             }
@@ -282,10 +327,8 @@ private fun scheduleSummary(plant: PlantEntity): String {
 }
 
 private fun PlantCategory.arabicLabel() = when (this) {
-    PlantCategory.TREE -> "شجرة"
-    PlantCategory.SEEDLING -> "شتلة"
-    PlantCategory.VEGETABLE -> "خضار"
-    PlantCategory.OTHER -> "أخرى"
+    PlantCategory.TREE -> "🌳 شجرة"
+    PlantCategory.VEGETABLE -> "🥕 خضروات"
 }
 
 private fun java.time.DayOfWeek.arabicLabel() = when (this) {

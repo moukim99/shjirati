@@ -14,6 +14,7 @@ object DatabaseProvider {
                 ShjiratiDatabase::class.java,
                 "shjirati.db"
             )
+                .addMigrations(MIGRATION_2_3)
                 .build()
                 .also { INSTANCE = it }
         }

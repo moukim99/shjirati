@@ -11,11 +11,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarToday
@@ -42,18 +44,42 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
+import com.moukim.shjirati.domain.PlantAgeCalculator
+import com.moukim.shjirati.domain.PlantRecognitionEngine
+import com.moukim.shjirati.domain.RecognizedPlantInfo
 import com.moukim.shjirati.domain.WateringCalculator
 import com.moukim.shjirati.ui.theme.*
 import com.moukim.shjirati.util.ImageUtils
 import java.io.File
 import java.time.DayOfWeek
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantFormScreen(
     initialPlant: PlantEntity? = null,
-    onSave: (String, PlantCategory, String?, String?, String?, Long?, Int?, Int, Int, Int, Boolean, Int?, Int?, Int?, Int?) -> Unit,
+    onSave: (
+        name: String,
+        category: PlantCategory,
+        location: String?,
+        notes: String?,
+        imageUri: String?,
+        plantedAt: Long?,
+        expectedDate: Long?,
+        isFruitBearing: Boolean,
+        icon: String?,
+        wateringIntervalDays: Int?,
+        wateringDaysMask: Int,
+        wateringHour: Int,
+        wateringMinute: Int,
+        seasonalScheduleEnabled: Boolean,
+        springIntervalDays: Int?,
+        summerIntervalDays: Int?,
+        autumnIntervalDays: Int?,
+        winterIntervalDays: Int?
+    ) -> Unit,
     onBack: () -> Unit
 ) {
     var name by remember { mutableStateOf(initialPlant?.name.orEmpty()) }
@@ -61,6 +87,14 @@ fun PlantFormScreen(
     var notes by remember { mutableStateOf(initialPlant?.notes.orEmpty()) }
     var imageUris by remember { mutableStateOf(initialPlant?.imageUrisList ?: emptyList()) }
     var plantedAt by remember { mutableStateOf(initialPlant?.plantedAtEpochMillis) }
+    var expectedDate by remember { mutableStateOf(initialPlant?.expectedDateEpochMillis) }
+    var isFruitBearing by remember { mutableStateOf(initialPlant?.isFruitBearing ?: false) }
+    var icon by remember { mutableStateOf(initialPlant?.icon ?: PlantRecognitionEngine.FALLBACK_ICON) }
+
+    var userTouchedCategory by remember { mutableStateOf(initialPlant != null) }
+    var userTouchedFruitBearing by remember { mutableStateOf(initialPlant != null) }
+    var userTouchedIcon by remember { mutableStateOf(initialPlant?.icon != null) }
+
     val context = LocalContext.current
     var category by remember { mutableStateOf(initialPlant?.category ?: PlantCategory.TREE) }
     var useWeekdays by remember { mutableStateOf(initialPlant?.wateringDaysMask != 0) }
@@ -84,6 +118,32 @@ fun PlantFormScreen(
     var showImageSourceDialog by remember { mutableStateOf(false) }
     var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
     var tempCameraFile by remember { mutableStateOf<File?>(null) }
+
+    var recognizedPlantInfo by remember { mutableStateOf<RecognizedPlantInfo?>(null) }
+
+    // Plant Recognition Engine logic as user types
+    LaunchedEffect(name) {
+        if (name.isNotBlank()) {
+            val recognized = PlantRecognitionEngine.recognize(name)
+            recognizedPlantInfo = recognized
+            if (recognized != null) {
+                icon = recognized.icon
+                if (!userTouchedCategory) {
+                    category = recognized.defaultCategory
+                }
+                if (!userTouchedFruitBearing && category == PlantCategory.TREE) {
+                    isFruitBearing = recognized.defaultIsFruitBearing
+                }
+            } else if (!userTouchedIcon && initialPlant == null) {
+                icon = PlantRecognitionEngine.FALLBACK_ICON
+            }
+        } else {
+            recognizedPlantInfo = null
+            if (!userTouchedIcon && initialPlant == null) {
+                icon = PlantRecognitionEngine.FALLBACK_ICON
+            }
+        }
+    }
 
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success && tempCameraUri != null) {
@@ -110,13 +170,31 @@ fun PlantFormScreen(
 
     fun showPlantingDatePicker() {
         val current = plantedAt?.let {
-            java.time.Instant.ofEpochMilli(it).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
         } ?: LocalDate.now()
         DatePickerDialog(
             context,
             { _, year, month, day ->
                 plantedAt = LocalDate.of(year, month + 1, day)
-                    .atStartOfDay(java.time.ZoneId.systemDefault())
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli()
+            },
+            current.year,
+            current.monthValue - 1,
+            current.dayOfMonth
+        ).show()
+    }
+
+    fun showExpectedDatePicker() {
+        val current = expectedDate?.let {
+            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+        } ?: LocalDate.now().plusMonths(3)
+        DatePickerDialog(
+            context,
+            { _, year, month, day ->
+                expectedDate = LocalDate.of(year, month + 1, day)
+                    .atStartOfDay(ZoneId.systemDefault())
                     .toInstant()
                     .toEpochMilli()
             },
@@ -170,7 +248,6 @@ fun PlantFormScreen(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
 
-                // Option 1: Camera
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -220,7 +297,6 @@ fun PlantFormScreen(
                     }
                 }
 
-                // Option 2: Gallery
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -267,7 +343,6 @@ fun PlantFormScreen(
                     }
                 }
 
-                // Option 3: Delete images (if images exist)
                 if (imageUris.isNotEmpty()) {
                     Surface(
                         modifier = Modifier
@@ -374,6 +449,83 @@ fun PlantFormScreen(
         ) {
             Spacer(modifier = Modifier.height(4.dp))
 
+            // Plant Icon Picker / Recognized Icon Avatar
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Surface(
+                    shape = CircleShape,
+                    color = PlantLavender.copy(alpha = 0.6f),
+                    border = BorderStroke(2.dp, PlantAccent.copy(alpha = 0.5f)),
+                    modifier = Modifier.size(72.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = icon,
+                            fontSize = 36.sp
+                        )
+                    }
+                }
+
+                if (recognizedPlantInfo != null && icon == recognizedPlantInfo?.icon) {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = PlantAccent.copy(alpha = 0.12f),
+                        border = BorderStroke(1.dp, PlantAccent.copy(alpha = 0.3f))
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                text = "تم التعرف تلقائياً: ${recognizedPlantInfo?.arabicName} ${recognizedPlantInfo?.icon}",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = PlantAccent
+                            )
+                        }
+                    }
+                } else {
+                    Text(
+                        text = "أيقونة النبتة (تتعرّف تلقائياً عند كتابة الاسم)",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = AppTextMuted
+                    )
+                }
+
+                // Quick emoji picker list
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(PlantRecognitionEngine.POPULAR_ICONS) { itemIcon ->
+                        val isSelected = icon == itemIcon
+                        Surface(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clickable {
+                                    icon = itemIcon
+                                    userTouchedIcon = true
+                                },
+                            shape = CircleShape,
+                            color = if (isSelected) PlantLavenderActive else Color.White,
+                            border = BorderStroke(
+                                width = if (isSelected) 2.dp else 1.dp,
+                                color = if (isSelected) PlantAccent else PlantBorderLight
+                            )
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(text = itemIcon, fontSize = 20.sp)
+                            }
+                        }
+                    }
+                }
+            }
+
             // Plant Name Input Field
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -394,7 +546,7 @@ fun PlantFormScreen(
                     value = name,
                     onValueChange = { name = it },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("مثال: ياسمين هندي، مونستيرا...", fontSize = 14.sp, color = PlantMuted.copy(alpha = 0.6f)) },
+                    placeholder = { Text("مثال: تفاح، طماطم، زيتون...", fontSize = 14.sp, color = PlantMuted.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Eco,
@@ -414,30 +566,36 @@ fun PlantFormScreen(
                 )
             }
 
-            // Plant Category Chips Selection
+            // Simplified Plant Category Selection (Tree or Vegetable)
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
-                    text = "نوع النبتة",
+                    text = "تصنيف النبتة",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = AppTextMain
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     PlantCategory.entries.forEach { item ->
                         val isSelected = category == item
                         Surface(
                             modifier = Modifier
                                 .weight(1f)
-                                .height(46.dp)
-                                .clickable { category = item },
+                                .height(50.dp)
+                                .clickable {
+                                    category = item
+                                    userTouchedCategory = true
+                                    if (category == PlantCategory.VEGETABLE) {
+                                        isFruitBearing = false
+                                    }
+                                },
                             shape = RoundedCornerShape(16.dp),
                             color = if (isSelected) PlantLavender else Color.White,
                             border = BorderStroke(
                                 width = if (isSelected) 2.dp else 1.dp,
-                                color = if (isSelected) PlantAccent.copy(alpha = 0.5f) else PlantBorderLight
+                                color = if (isSelected) PlantAccent else PlantBorderLight
                             )
                         ) {
                             Box(
@@ -446,11 +604,210 @@ fun PlantFormScreen(
                             ) {
                                 Text(
                                     text = item.arabicLabel(),
-                                    fontSize = 13.sp,
+                                    fontSize = 15.sp,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                                     color = if (isSelected) PlantDark else PlantMuted
                                 )
                             }
+                        }
+                    }
+                }
+            }
+
+            // Fruit-bearing option for Trees
+            if (category == PlantCategory.TREE) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color.White,
+                    border = BorderStroke(1.dp, PlantBorderLight)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "شجرة مثمرة (تنتج ثماراً)",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AppTextMain
+                            )
+                            Text(
+                                text = "تفعيل هذا الخيار لإضافة تاريخ الحصاد المتوقع",
+                                fontSize = 12.sp,
+                                color = AppTextMuted
+                            )
+                        }
+                        Switch(
+                            checked = isFruitBearing,
+                            onCheckedChange = { checked ->
+                                isFruitBearing = checked
+                                userTouchedFruitBearing = true
+                            },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = AppPrimaryBrown,
+                                uncheckedThumbColor = Color.White,
+                                uncheckedTrackColor = PlantLavenderBorder
+                            )
+                        )
+                    }
+                }
+            }
+
+            // Planting Date ("تاريخ الغرس") & Dynamic Age Display
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "تاريخ الغرس",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTextMain
+                )
+
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showPlantingDatePicker() },
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color.White,
+                    border = BorderStroke(1.dp, PlantBorderLight)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .background(PlantLavender.copy(alpha = 0.5f), shape = RoundedCornerShape(12.dp)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.CalendarToday,
+                                    contentDescription = null,
+                                    tint = PlantAccent,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = plantedAt?.let {
+                                        val date = Instant.ofEpochMilli(it)
+                                            .atZone(ZoneId.systemDefault())
+                                            .toLocalDate()
+                                        "%04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth)
+                                    } ?: "اختر تاريخ الغرس",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = AppTextMain
+                                )
+
+                                val calculatedAge = remember(plantedAt, category) {
+                                    PlantAgeCalculator.calculateAge(plantedAt, category)
+                                }
+                                if (calculatedAge != null) {
+                                    Text(
+                                        text = "العمر الحالي: $calculatedAge",
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = AppPrimaryBrown
+                                    )
+                                }
+                            }
+                        }
+                        Icon(
+                            imageVector = Icons.Default.ChevronLeft,
+                            contentDescription = null,
+                            tint = PlantMuted.copy(alpha = 0.6f),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            }
+
+            // Expected Date Picker ("التاريخ المتوقع")
+            val showExpectedDateField = (category == PlantCategory.VEGETABLE) || (category == PlantCategory.TREE && isFruitBearing)
+            if (showExpectedDateField) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val expectedLabel = if (category == PlantCategory.TREE) "تاريخ الحصاد المتوقع" else "تاريخ الإنبات المتوقع"
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = expectedLabel,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = AppTextMain
+                        )
+                        if (expectedDate != null) {
+                            TextButton(
+                                onClick = { expectedDate = null },
+                                contentPadding = PaddingValues(0.dp)
+                            ) {
+                                Text("إلغاء", fontSize = 12.sp, color = MaterialTheme.colorScheme.error)
+                            }
+                        }
+                    }
+
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showExpectedDatePicker() },
+                        shape = RoundedCornerShape(16.dp),
+                        color = Color.White,
+                        border = BorderStroke(1.dp, PlantBorderLight)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 14.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .background(PlantLavender.copy(alpha = 0.5f), shape = RoundedCornerShape(12.dp)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.CalendarToday,
+                                        contentDescription = null,
+                                        tint = PlantAccent,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(
+                                    text = expectedDate?.let {
+                                        val date = Instant.ofEpochMilli(it)
+                                            .atZone(ZoneId.systemDefault())
+                                            .toLocalDate()
+                                        "%04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth)
+                                    } ?: "اختياري - انقر لتحديد التاريخ",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = if (expectedDate != null) AppTextMain else PlantMuted
+                                )
+                            }
+                            Icon(
+                                imageVector = Icons.Default.ChevronLeft,
+                                contentDescription = null,
+                                tint = PlantMuted.copy(alpha = 0.6f),
+                                modifier = Modifier.size(20.dp)
+                            )
                         }
                     }
                 }
@@ -495,7 +852,7 @@ fun PlantFormScreen(
                 )
             }
 
-            // Photo Section (Multiple Photos Support)
+            // Photo Section
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -667,59 +1024,6 @@ fun PlantFormScreen(
                         }
                     }
                 }
-
-                // Planting Date Action Card
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .clickable { showPlantingDatePicker() },
-                    shape = RoundedCornerShape(16.dp),
-                    color = Color.White,
-                    border = BorderStroke(1.dp, PlantBorderLight)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Box(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .background(PlantLavender.copy(alpha = 0.5f), shape = RoundedCornerShape(12.dp)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.CalendarToday,
-                                    contentDescription = null,
-                                    tint = PlantAccent,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(
-                                text = plantedAt?.let {
-                                    val date = java.time.Instant.ofEpochMilli(it)
-                                        .atZone(java.time.ZoneId.systemDefault())
-                                        .toLocalDate()
-                                    "تاريخ الغرس: %04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth)
-                                } ?: "إضافة تاريخ الغرس",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = AppTextMain
-                            )
-                        }
-                        Icon(
-                            imageVector = Icons.Default.ChevronLeft,
-                            contentDescription = null,
-                            tint = PlantMuted.copy(alpha = 0.6f),
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
             }
 
             // Notes Input Field
@@ -770,7 +1074,7 @@ fun PlantFormScreen(
                 )
             }
 
-            // Mode Toggle (Segmented Control)
+            // Mode Toggle
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -819,7 +1123,6 @@ fun PlantFormScreen(
                 }
             }
 
-            // Days Selection or Interval Input
             if (useWeekdays) {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
@@ -890,7 +1193,6 @@ fun PlantFormScreen(
 
             HorizontalDivider(color = PlantLavenderBorder.copy(alpha = 0.6f), thickness = 1.dp)
 
-            // Seasonal Adjustment Switch Card
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -967,7 +1269,6 @@ fun PlantFormScreen(
                 SeasonField("الشتاء", winterInterval) { winterInterval = it }
             }
 
-            // Reminder Time Trigger Button
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1004,7 +1305,6 @@ fun PlantFormScreen(
                 }
             }
 
-            // Save Plant Button
             Button(
                 onClick = {
                     val interval = intervalText.toIntOrNull()?.coerceIn(1, 99)
@@ -1020,6 +1320,9 @@ fun PlantFormScreen(
                         notes.trim().ifBlank { null },
                         if (imageUris.isEmpty()) null else imageUris.joinToString("|"),
                         plantedAt,
+                        if (showExpectedDateField) expectedDate else null,
+                        isFruitBearing,
+                        icon,
                         if (useWeekdays) null else interval,
                         mask,
                         wateringHour,
@@ -1058,10 +1361,8 @@ fun PlantFormScreen(
 }
 
 private fun PlantCategory.arabicLabel() = when (this) {
-    PlantCategory.TREE -> "شجرة"
-    PlantCategory.SEEDLING -> "شتلة"
-    PlantCategory.VEGETABLE -> "خضار"
-    PlantCategory.OTHER -> "أخرى"
+    PlantCategory.TREE -> "🌳 شجرة"
+    PlantCategory.VEGETABLE -> "🥕 خضروات"
 }
 
 private fun DayOfWeek.arabicLabel() = when (this) {
@@ -1098,7 +1399,7 @@ private fun SeasonField(label: String, value: String, onValueChange: (String) ->
 fun PlantFormScreenPreview() {
     ShjiratiTheme {
         PlantFormScreen(
-            onSave = { _, _, _, _, _, _, _, _, _, _, _, _, _, _, _ -> },
+            onSave = { _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _ -> },
             onBack = {}
         )
     }

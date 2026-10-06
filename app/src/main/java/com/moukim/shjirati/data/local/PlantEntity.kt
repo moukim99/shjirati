@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-enum class PlantCategory { TREE, SEEDLING, VEGETABLE, OTHER }
+enum class PlantCategory { TREE, VEGETABLE }
 
 @Entity(tableName = "plants", indices = [Index("category"), Index("name")])
 data class PlantEntity(
@@ -14,6 +14,9 @@ data class PlantEntity(
     val species: String? = null,
     val imageUri: String? = null,
     val plantedAtEpochMillis: Long? = null,
+    val expectedDateEpochMillis: Long? = null,
+    val isFruitBearing: Boolean = false,
+    val icon: String? = null,
     val location: String? = null,
     val notes: String? = null,
     val wateringIntervalDays: Int? = null,

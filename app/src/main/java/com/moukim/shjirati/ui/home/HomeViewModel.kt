@@ -9,6 +9,7 @@ import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
 import com.moukim.shjirati.data.local.WateringLogEntity
 import com.moukim.shjirati.domain.PlantRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -26,6 +27,9 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
         notes: String?,
         imageUri: String?,
         plantedAtEpochMillis: Long?,
+        expectedDateEpochMillis: Long?,
+        isFruitBearing: Boolean,
+        icon: String?,
         wateringIntervalDays: Int?,
         wateringDaysMask: Int,
         wateringHour: Int,
@@ -47,6 +51,9 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
                     notes = notes,
                     imageUri = imageUri,
                     plantedAtEpochMillis = plantedAtEpochMillis,
+                    expectedDateEpochMillis = expectedDateEpochMillis,
+                    isFruitBearing = isFruitBearing,
+                    icon = icon,
                     wateringIntervalDays = wateringIntervalDays,
                     wateringDaysMask = wateringDaysMask,
                     wateringHour = wateringHour,
@@ -71,6 +78,9 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
         notes: String?,
         imageUri: String?,
         plantedAtEpochMillis: Long?,
+        expectedDateEpochMillis: Long?,
+        isFruitBearing: Boolean,
+        icon: String?,
         wateringIntervalDays: Int?,
         wateringDaysMask: Int,
         wateringHour: Int,
@@ -83,13 +93,24 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
     ) {
         viewModelScope.launch {
             val updated = plant.copy(
-                name = name, category = category, location = location, notes = notes,
-                imageUri = imageUri, plantedAtEpochMillis = plantedAtEpochMillis,
-                wateringIntervalDays = wateringIntervalDays, wateringDaysMask = wateringDaysMask,
-                wateringHour = wateringHour, wateringMinute = wateringMinute,
+                name = name,
+                category = category,
+                location = location,
+                notes = notes,
+                imageUri = imageUri,
+                plantedAtEpochMillis = plantedAtEpochMillis,
+                expectedDateEpochMillis = expectedDateEpochMillis,
+                isFruitBearing = isFruitBearing,
+                icon = icon,
+                wateringIntervalDays = wateringIntervalDays,
+                wateringDaysMask = wateringDaysMask,
+                wateringHour = wateringHour,
+                wateringMinute = wateringMinute,
                 seasonalScheduleEnabled = seasonalEnabled,
-                springIntervalDays = springIntervalDays, summerIntervalDays = summerIntervalDays,
-                autumnIntervalDays = autumnIntervalDays, winterIntervalDays = winterIntervalDays,
+                springIntervalDays = springIntervalDays,
+                summerIntervalDays = summerIntervalDays,
+                autumnIntervalDays = autumnIntervalDays,
+                winterIntervalDays = winterIntervalDays,
                 updatedAtEpochMillis = System.currentTimeMillis()
             )
             repository.savePlant(updated)
@@ -114,7 +135,9 @@ class HomeViewModel(private val repository: PlantRepository) : ViewModel() {
     }
 
     fun scheduleAll(context: Context) {
-        plants.value.forEach { WateringNotificationScheduler.schedule(context, it) }
+        viewModelScope.launch(Dispatchers.IO) {
+            plants.value.forEach { WateringNotificationScheduler.schedule(context, it) }
+        }
     }
 
     fun water(plant: PlantEntity) {

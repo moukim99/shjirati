@@ -98,8 +98,8 @@ private fun ShjiratiApp(
         val plant = editingPlant!!
         PlantFormScreen(
             initialPlant = plant,
-            onSave = { name, category, location, notes, imageUri, plantedAt, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
-                vm.updatePlant(plant, name, category, location, notes, imageUri, plantedAt, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
+            onSave = { name, category, location, notes, imageUri, plantedAt, expectedDate, isFruitBearing, icon, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
+                vm.updatePlant(plant, name, category, location, notes, imageUri, plantedAt, expectedDate, isFruitBearing, icon, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
                 editingPlant = null
             },
             onBack = { editingPlant = null }
@@ -116,8 +116,8 @@ private fun ShjiratiApp(
         )
     } else if (addingPlant) {
         PlantFormScreen(
-            onSave = { name, category, location, notes, imageUri, plantedAt, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
-                vm.savePlant(name, category, location, notes, imageUri, plantedAt, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
+            onSave = { name, category, location, notes, imageUri, plantedAt, expectedDate, isFruitBearing, icon, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
+                vm.savePlant(name, category, location, notes, imageUri, plantedAt, expectedDate, isFruitBearing, icon, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
                 addingPlant = false
             },
             onBack = { addingPlant = false }

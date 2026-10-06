@@ -1,6 +1,5 @@
 package com.moukim.shjirati.ui.home
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,9 +33,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
+import com.moukim.shjirati.domain.PlantAgeCalculator
 import com.moukim.shjirati.domain.WateringCalculator
 import com.moukim.shjirati.ui.theme.*
+import com.moukim.shjirati.util.ImageUtils
 
 @Composable
 fun HomeScreen(
@@ -45,7 +47,8 @@ fun HomeScreen(
     onWater: (PlantEntity) -> Unit,
     onSelectPlant: (PlantEntity) -> Unit
 ) {
-    val due = plants.filter { WateringCalculator.isDueToday(it) }
+    val due = remember(plants) { plants.filter { WateringCalculator.isDueToday(it) } }
+    val notDue = remember(plants, due) { plants.filter { it !in due } }
 
     Scaffold(
         containerColor = AppBackground,
@@ -264,7 +267,7 @@ fun HomeScreen(
                             }
                         }
                     }
-                    items(due, key = { it.id }) { plant ->
+                    items(due, key = { "due_${it.id}" }) { plant ->
                         PlantCard(
                             plant = plant,
                             dueToday = true,
@@ -273,7 +276,7 @@ fun HomeScreen(
                         )
                     }
                 }
-                items(plants.filter { it !in due }, key = { it.id }) { plant ->
+                items(notDue, key = { "notdue_${it.id}" }) { plant ->
                     PlantCard(
                         plant = plant,
                         dueToday = false,
@@ -297,7 +300,11 @@ private fun PlantCard(
         plant.imageUrisList.firstOrNull()
     }
     val imageBitmap = remember(coverPath) {
-        coverPath?.let { runCatching { BitmapFactory.decodeFile(it) }.getOrNull() }
+        coverPath?.let { ImageUtils.loadThumbnailBitmap(it, maxDimension = 360) }
+    }
+
+    val calculatedAge = remember(plant.plantedAtEpochMillis, plant.category) {
+        PlantAgeCalculator.calculateAge(plant.plantedAtEpochMillis, plant.category)
     }
 
     Card(
@@ -328,6 +335,21 @@ private fun PlantCard(
                             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
                         contentScale = ContentScale.Crop
                     )
+                    if (plant.icon != null) {
+                        Surface(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .align(Alignment.TopStart),
+                            shape = CircleShape,
+                            color = Color.White.copy(alpha = 0.85f)
+                        ) {
+                            Text(
+                                text = plant.icon,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
                     if (plant.imageUrisList.size > 1) {
                         Surface(
                             modifier = Modifier
@@ -368,12 +390,19 @@ private fun PlantCard(
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Eco,
-                        contentDescription = null,
-                        tint = if (dueToday) AppPrimaryBrown else AppWaterDrop,
-                        modifier = Modifier.size(38.dp)
-                    )
+                    if (plant.icon != null) {
+                        Text(
+                            text = plant.icon,
+                            fontSize = 44.sp
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.Eco,
+                            contentDescription = null,
+                            tint = if (dueToday) AppPrimaryBrown else AppWaterDrop,
+                            modifier = Modifier.size(38.dp)
+                        )
+                    }
                 }
             }
 
@@ -381,7 +410,7 @@ private fun PlantCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -406,25 +435,35 @@ private fun PlantCard(
                     )
                 }
 
+                Text(
+                    text = plant.category.arabicLabel(),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = AppTextMuted
+                )
+
+                if (calculatedAge != null) {
+                    Text(
+                        text = "العمر: $calculatedAge",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppPrimaryBrown,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
                 plant.location?.let { loc ->
                     if (loc.isNotBlank()) {
                         Text(
                             text = "المكان: $loc",
-                            fontSize = 12.sp,
+                            fontSize = 11.sp,
                             color = AppTextMuted,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
-
-                Text(
-                    text = if (dueToday) "مطلوب السقي" else "لا يحتاج سقي",
-                    fontSize = 12.sp,
-                    fontWeight = if (dueToday) FontWeight.Bold else FontWeight.Normal,
-                    color = if (dueToday) AppPrimaryBrown else AppTextMuted,
-                    maxLines = 1
-                )
 
                 if (dueToday) {
                     Button(
@@ -456,6 +495,11 @@ private fun PlantCard(
             }
         }
     }
+}
+
+private fun PlantCategory.arabicLabel() = when (this) {
+    PlantCategory.TREE -> "🌳 شجرة"
+    PlantCategory.VEGETABLE -> "🥕 خضروات"
 }
 
 @Preview(showBackground = true)
