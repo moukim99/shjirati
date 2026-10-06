@@ -1,20 +1,31 @@
 package com.moukim.shjirati.ui.plant
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import android.graphics.BitmapFactory
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
@@ -25,6 +36,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantDetailScreen(
     plant: PlantEntity,
@@ -36,7 +48,14 @@ fun PlantDetailScreen(
 ) {
     var confirmDelete by remember { mutableStateOf(false) }
     val logs by history.collectAsState(initial = emptyList())
-    val imageBitmap = remember(plant.imageUri) { plant.imageUri?.let { runCatching { BitmapFactory.decodeFile(it) }.getOrNull() } }
+    
+    val imagePaths = remember(plant.imageUri) { plant.imageUrisList }
+    var selectedImageIndex by remember { mutableIntStateOf(0) }
+    val currentPath = imagePaths.getOrNull(selectedImageIndex) ?: imagePaths.firstOrNull()
+    val mainBitmap = remember(currentPath) {
+        currentPath?.let { runCatching { BitmapFactory.decodeFile(it) }.getOrNull() }
+    }
+    
     val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd - HH:mm").withZone(ZoneId.systemDefault())
     val dueToday = WateringCalculator.isDueToday(plant)
 
@@ -52,14 +71,68 @@ fun PlantDetailScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(plant.name) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, "رجوع") } },
-                actions = {
-                    IconButton(onClick = onEdit) { Icon(Icons.Default.Edit, "تعديل") }
-                    TextButton(onClick = { confirmDelete = true }) { Text("حذف") }
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.95f),
+                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.8f)),
+                shadowElevation = 6.dp,
+                tonalElevation = 2.dp
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "رجوع",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    Text(
+                        text = plant.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp)
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = onEdit) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "تعديل",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        TextButton(
+                            onClick = { confirmDelete = true },
+                            contentPadding = PaddingValues(horizontal = 8.dp)
+                        ) {
+                            Text(
+                                text = "حذف",
+                                color = MaterialTheme.colorScheme.error,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
                 }
-            )
+            }
         }
     ) { padding ->
         LazyColumn(
@@ -70,7 +143,49 @@ fun PlantDetailScreen(
             item {
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        imageBitmap?.let { bitmap -> Image(bitmap.asImageBitmap(), contentDescription = "صورة النبتة", modifier = Modifier.fillMaxWidth().height(220.dp), contentScale = ContentScale.Crop) }
+                        if (mainBitmap != null) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Image(
+                                    bitmap = mainBitmap.asImageBitmap(),
+                                    contentDescription = "صورة النبتة",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(230.dp)
+                                        .clip(RoundedCornerShape(16.dp)),
+                                    contentScale = ContentScale.Crop
+                                )
+                                if (imagePaths.size > 1) {
+                                    LazyRow(
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        items(imagePaths.size) { idx ->
+                                            val path = imagePaths[idx]
+                                            val thumbBitmap = remember(path) {
+                                                runCatching { BitmapFactory.decodeFile(path) }.getOrNull()
+                                            }
+                                            val isSelected = idx == selectedImageIndex
+                                            if (thumbBitmap != null) {
+                                                Image(
+                                                    bitmap = thumbBitmap.asImageBitmap(),
+                                                    contentDescription = null,
+                                                    modifier = Modifier
+                                                        .size(56.dp)
+                                                        .clip(RoundedCornerShape(12.dp))
+                                                        .border(
+                                                            width = if (isSelected) 2.dp else 0.dp,
+                                                            color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
+                                                            shape = RoundedCornerShape(12.dp)
+                                                        )
+                                                        .clickable { selectedImageIndex = idx },
+                                                    contentScale = ContentScale.Crop
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         Text(plant.name, style = MaterialTheme.typography.headlineMedium)
                         Text(plant.category.arabicLabel(), style = MaterialTheme.typography.titleMedium)
                         plant.location?.let { Text("المكان: $it", style = MaterialTheme.typography.bodyLarge) }
@@ -91,7 +206,40 @@ fun PlantDetailScreen(
                     Text("سقي الآن", style = MaterialTheme.typography.titleMedium)
                 }
             }
-            item { Text("سجل السقي", style = MaterialTheme.typography.headlineSmall) }
+            item {
+                Surface(
+                    shape = RoundedCornerShape(18.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.7f)),
+                    shadowElevation = 4.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                            modifier = Modifier.size(28.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.WaterDrop,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+                        Text(
+                            text = "سجل السقي",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
             if (logs.isEmpty()) {
                 item {
                     Card(Modifier.fillMaxWidth()) {

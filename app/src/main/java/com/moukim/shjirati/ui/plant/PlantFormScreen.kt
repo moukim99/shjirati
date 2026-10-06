@@ -1,39 +1,77 @@
 package com.moukim.shjirati.ui.plant
 
+import android.app.DatePickerDialog
+import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Eco
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import android.app.DatePickerDialog
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import java.io.File
-import java.io.FileOutputStream
-import java.time.LocalDate
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.moukim.shjirati.data.local.PlantCategory
+import com.moukim.shjirati.data.local.PlantEntity
+import com.moukim.shjirati.domain.WateringCalculator
+import com.moukim.shjirati.ui.theme.*
+import com.moukim.shjirati.util.ImageUtils
+import java.io.File
 import java.time.DayOfWeek
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantFormScreen(
-    initialPlant: com.moukim.shjirati.data.local.PlantEntity? = null,
+    initialPlant: PlantEntity? = null,
     onSave: (String, PlantCategory, String?, String?, String?, Long?, Int?, Int, Int, Int, Boolean, Int?, Int?, Int?, Int?) -> Unit,
     onBack: () -> Unit
 ) {
     var name by remember { mutableStateOf(initialPlant?.name.orEmpty()) }
     var location by remember { mutableStateOf(initialPlant?.location.orEmpty()) }
     var notes by remember { mutableStateOf(initialPlant?.notes.orEmpty()) }
-    var imageUri by remember { mutableStateOf(initialPlant?.imageUri) }
+    var imageUris by remember { mutableStateOf(initialPlant?.imageUrisList ?: emptyList()) }
     var plantedAt by remember { mutableStateOf(initialPlant?.plantedAtEpochMillis) }
     val context = LocalContext.current
     var category by remember { mutableStateOf(initialPlant?.category ?: PlantCategory.TREE) }
     var useWeekdays by remember { mutableStateOf(initialPlant?.wateringDaysMask != 0) }
     var intervalText by remember { mutableStateOf((initialPlant?.wateringIntervalDays ?: 3).toString()) }
-    var selectedDays by remember { mutableStateOf(initialPlant?.wateringDaysMask?.let { mask -> DayOfWeek.entries.filter { mask and (1 shl (it.value - 1)) != 0 }.toSet() } ?: setOf(DayOfWeek.MONDAY, DayOfWeek.THURSDAY)) }
+    var selectedDays by remember {
+        mutableStateOf(
+            initialPlant?.wateringDaysMask?.let { mask ->
+                DayOfWeek.entries.filter { mask and (1 shl (it.value - 1)) != 0 }.toSet()
+            } ?: setOf(LocalDate.now().dayOfWeek)
+        )
+    }
     var showTimePicker by remember { mutableStateOf(false) }
     var wateringHour by remember { mutableIntStateOf(initialPlant?.wateringHour ?: 18) }
     var wateringMinute by remember { mutableIntStateOf(initialPlant?.wateringMinute ?: 0) }
@@ -43,19 +81,51 @@ fun PlantFormScreen(
     var autumnInterval by remember { mutableStateOf(initialPlant?.autumnIntervalDays?.toString().orEmpty()) }
     var winterInterval by remember { mutableStateOf(initialPlant?.winterIntervalDays?.toString().orEmpty()) }
 
-    val imagePicker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) runCatching {
-            val file = File(context.filesDir, "plant_${System.currentTimeMillis()}.jpg")
-            context.contentResolver.openInputStream(uri)?.use { input -> FileOutputStream(file).use { output -> input.copyTo(output) } }
-            imageUri = file.absolutePath
+    var showImageSourceDialog by remember { mutableStateOf(false) }
+    var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
+    var tempCameraFile by remember { mutableStateOf<File?>(null) }
+
+    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success && tempCameraUri != null) {
+            val savedPath = ImageUtils.saveAndCompressImage(context, tempCameraUri!!)
+            if (savedPath != null) {
+                imageUris = imageUris + savedPath
+            }
+        }
+        tempCameraFile?.delete()
+        tempCameraFile = null
+        tempCameraUri = null
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
+        if (uris.isNotEmpty()) {
+            val newPaths = uris.mapNotNull { uri ->
+                ImageUtils.saveAndCompressImage(context, uri)
+            }
+            if (newPaths.isNotEmpty()) {
+                imageUris = imageUris + newPaths
+            }
         }
     }
+
     fun showPlantingDatePicker() {
-        val current = plantedAt?.let { java.time.Instant.ofEpochMilli(it).atZone(java.time.ZoneId.systemDefault()).toLocalDate() } ?: LocalDate.now()
-        DatePickerDialog(context, { _, year, month, day ->
-            plantedAt = LocalDate.of(year, month + 1, day).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
-        }, current.year, current.monthValue - 1, current.dayOfMonth).show()
+        val current = plantedAt?.let {
+            java.time.Instant.ofEpochMilli(it).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+        } ?: LocalDate.now()
+        DatePickerDialog(
+            context,
+            { _, year, month, day ->
+                plantedAt = LocalDate.of(year, month + 1, day)
+                    .atStartOfDay(java.time.ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli()
+            },
+            current.year,
+            current.monthValue - 1,
+            current.dayOfMonth
+        ).show()
     }
+
     val timeState = rememberTimePickerState(
         initialHour = wateringHour,
         initialMinute = wateringMinute,
@@ -70,165 +140,871 @@ fun PlantFormScreen(
                     wateringHour = timeState.hour
                     wateringMinute = timeState.minute
                     showTimePicker = false
-                }) { Text("تم") }
+                }) { Text("تم", color = AppPrimaryBrown, fontWeight = FontWeight.Bold) }
             },
             dismissButton = {
                 TextButton(onClick = { showTimePicker = false }) { Text("إلغاء") }
             },
-            title = { Text("وقت التذكير") },
+            title = { Text("وقت التذكير", color = AppTextMain, fontWeight = FontWeight.Bold) },
             text = { TimePicker(state = timeState) }
         )
     }
 
+    if (showImageSourceDialog) {
+        ModalBottomSheet(
+            onDismissRequest = { showImageSourceDialog = false },
+            containerColor = Color.White,
+            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = "إضافة صورة النبتة",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTextMain,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+
+                // Option 1: Camera
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            showImageSourceDialog = false
+                            val result = ImageUtils.createTempImageUri(context)
+                            if (result != null) {
+                                tempCameraFile = result.first
+                                tempCameraUri = result.second
+                                cameraLauncher.launch(result.second)
+                            }
+                        },
+                    shape = RoundedCornerShape(16.dp),
+                    color = PlantLavender.copy(alpha = 0.3f)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(PlantAccent, RoundedCornerShape(10.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.PhotoCamera,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(22.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column {
+                            Text(
+                                text = "التقاط صورة بالكاميرا",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AppTextMain
+                            )
+                            Text(
+                                text = "استخدام كاميرا الهاتف مباشرة",
+                                fontSize = 12.sp,
+                                color = PlantMuted
+                            )
+                        }
+                    }
+                }
+
+                // Option 2: Gallery
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            showImageSourceDialog = false
+                            galleryLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        },
+                    shape = RoundedCornerShape(16.dp),
+                    color = PlantLavender.copy(alpha = 0.3f)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(AppPrimaryBrown, RoundedCornerShape(10.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.PhotoLibrary,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(22.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column {
+                            Text(
+                                text = "اختيار من معرض الصور",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AppTextMain
+                            )
+                            Text(
+                                text = "اختيار صورة مخزنة سابقاً",
+                                fontSize = 12.sp,
+                                color = PlantMuted
+                            )
+                        }
+                    }
+                }
+
+                // Option 3: Delete images (if images exist)
+                if (imageUris.isNotEmpty()) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                showImageSourceDialog = false
+                                imageUris = emptyList()
+                            },
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .background(MaterialTheme.colorScheme.error, RoundedCornerShape(10.dp)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                text = "حذف جميع الصور",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+
     Scaffold(
+        containerColor = AppBackground,
         topBar = {
-            TopAppBar(
-                title = { Text(if (initialPlant == null) "إضافة نبتة" else "تعديل النبتة") },
-                navigationIcon = { TextButton(onClick = onBack) { Text("رجوع") } }
-            )
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                shape = RoundedCornerShape(24.dp),
+                color = AppCard.copy(alpha = 0.95f),
+                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.8f)),
+                shadowElevation = 6.dp,
+                tonalElevation = 2.dp
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    TextButton(
+                        onClick = onBack,
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = "رجوع",
+                            tint = AppPrimaryBrown,
+                            modifier = Modifier.size(22.dp)
+                        )
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(
+                            text = "رجوع",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = AppPrimaryBrown
+                        )
+                    }
+
+                    Text(
+                        text = if (initialPlant == null) "إضافة نبتة" else "تعديل النبتة",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTextMain
+                    )
+
+                    Spacer(modifier = Modifier.width(60.dp))
+                }
+            }
         }
     ) { padding ->
         Column(
-            Modifier.fillMaxSize().padding(padding).padding(20.dp).verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(22.dp)
         ) {
-            OutlinedTextField(
-                name, { name = it }, Modifier.fillMaxWidth(),
-                label = { Text("اسم النبتة") },
-                singleLine = true
-            )
+            Spacer(modifier = Modifier.height(4.dp))
 
-            Text("نوع النبتة", style = MaterialTheme.typography.titleMedium)
-            PlantCategory.entries.forEach { item ->
-                FilterChip(
-                    selected = category == item,
-                    onClick = { category = item },
-                    label = { Text(item.arabicLabel()) },
-                    modifier = Modifier.fillMaxWidth()
+            // Plant Name Input Field
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "اسم النبتة ",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTextMain
+                    )
+                    Text(
+                        text = "*",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = PlantWarmAmber
+                    )
+                }
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text("مثال: ياسمين هندي، مونستيرا...", fontSize = 14.sp, color = PlantMuted.copy(alpha = 0.6f)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Eco,
+                            contentDescription = null,
+                            tint = PlantMuted.copy(alpha = 0.6f),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedBorderColor = PlantAccent,
+                        unfocusedBorderColor = PlantBorderLight
+                    ),
+                    singleLine = true
                 )
             }
 
-            OutlinedTextField(
-                location, { location = it }, Modifier.fillMaxWidth(),
-                label = { Text("مكانها في الحديقة (اختياري)") },
-                singleLine = true
-            )
-            OutlinedButton(onClick = { imagePicker.launch(ActivityResultContracts.PickVisualMedia.ImageOnly) }, Modifier.fillMaxWidth().height(56.dp)) {
-                Text(if (imageUri == null) "إضافة صورة للنبتة" else "تغيير صورة النبتة")
-            }
-            OutlinedButton(onClick = { showPlantingDatePicker() }, Modifier.fillMaxWidth().height(56.dp)) {
-                Text(plantedAt?.let {
-                    val date = java.time.Instant.ofEpochMilli(it).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
-                    "تاريخ الغرس: %04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth)
-                } ?: "إضافة تاريخ الغرس")
-            }
-            OutlinedTextField(
-                notes, { notes = it }, Modifier.fillMaxWidth(),
-                label = { Text("ملاحظات (اختياري)") },
-                minLines = 3
-            )
-
-            HorizontalDivider()
-
-            Text("جدول السقي", style = MaterialTheme.typography.titleLarge)
-            Text(
-                "اختر الطريقة الأسهل لتذكيرك بالسقي.",
-                style = MaterialTheme.typography.bodyLarge
-            )
-
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                if (!useWeekdays) {
-                    Button(onClick = { useWeekdays = false }, Modifier.weight(1f)) {
-                        Text("كل عدة أيام")
-                    }
-                    OutlinedButton(onClick = { useWeekdays = true }, Modifier.weight(1f)) {
-                        Text("أيام محددة")
-                    }
-                } else {
-                    OutlinedButton(onClick = { useWeekdays = false }, Modifier.weight(1f)) {
-                        Text("كل عدة أيام")
-                    }
-                    Button(onClick = { useWeekdays = true }, Modifier.weight(1f)) {
-                        Text("أيام محددة")
+            // Plant Category Chips Selection
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    text = "نوع النبتة",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTextMain
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    PlantCategory.entries.forEach { item ->
+                        val isSelected = category == item
+                        Surface(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(46.dp)
+                                .clickable { category = item },
+                            shape = RoundedCornerShape(16.dp),
+                            color = if (isSelected) PlantLavender else Color.White,
+                            border = BorderStroke(
+                                width = if (isSelected) 2.dp else 1.dp,
+                                color = if (isSelected) PlantAccent.copy(alpha = 0.5f) else PlantBorderLight
+                            )
+                        ) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                Text(
+                                    text = item.arabicLabel(),
+                                    fontSize = 13.sp,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                    color = if (isSelected) PlantDark else PlantMuted
+                                )
+                            }
+                        }
                     }
                 }
             }
 
-            if (!useWeekdays) {
+            // Garden Location Field
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "مكانها في الحديقة ",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTextMain
+                    )
+                    Text(
+                        text = "(اختياري)",
+                        fontSize = 12.sp,
+                        color = PlantMuted
+                    )
+                }
+                OutlinedTextField(
+                    value = location,
+                    onValueChange = { location = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text("مثال: الشرفة الجنوبية، الركن المشمس...", fontSize = 14.sp, color = PlantMuted.copy(alpha = 0.6f)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = null,
+                            tint = PlantMuted.copy(alpha = 0.6f),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedBorderColor = PlantAccent,
+                        unfocusedBorderColor = PlantBorderLight
+                    ),
+                    singleLine = true
+                )
+            }
+
+            // Photo Section (Multiple Photos Support)
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (imageUris.isEmpty()) "صور النبتة" else "صور النبتة (${imageUris.size})",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTextMain
+                    )
+                    if (imageUris.isNotEmpty()) {
+                        TextButton(
+                            onClick = { showImageSourceDialog = true },
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = null,
+                                tint = AppPrimaryBrown,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = "إضافة صورة",
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AppPrimaryBrown
+                            )
+                        }
+                    }
+                }
+
+                if (imageUris.isEmpty()) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(72.dp)
+                            .clickable { showImageSourceDialog = true },
+                        shape = RoundedCornerShape(16.dp),
+                        color = Color.White,
+                        border = BorderStroke(1.dp, PlantBorderLight)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(44.dp)
+                                        .background(PlantLavender.copy(alpha = 0.5f), shape = RoundedCornerShape(12.dp)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.PhotoCamera,
+                                        contentDescription = null,
+                                        tint = PlantAccent,
+                                        modifier = Modifier.size(22.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(14.dp))
+                                Column {
+                                    Text(
+                                        text = "إضافة صور للنبتة",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = AppTextMain
+                                    )
+                                    Text(
+                                        text = "التقاط من الكاميرا أو اختيار عدة صور من المعرض",
+                                        fontSize = 12.sp,
+                                        color = PlantMuted
+                                    )
+                                }
+                            }
+                            Icon(
+                                imageVector = Icons.Default.ChevronLeft,
+                                contentDescription = null,
+                                tint = PlantMuted.copy(alpha = 0.6f),
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
+                } else {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(vertical = 4.dp)
+                    ) {
+                        item {
+                            Surface(
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .clickable { showImageSourceDialog = true },
+                                shape = RoundedCornerShape(16.dp),
+                                color = PlantLavender.copy(alpha = 0.3f),
+                                border = BorderStroke(1.dp, PlantAccent.copy(alpha = 0.4f))
+                            ) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = "إضافة صورة",
+                                        tint = PlantAccent,
+                                        modifier = Modifier.size(28.dp)
+                                    )
+                                    Spacer(modifier = Modifier.height(2.dp))
+                                    Text(
+                                        text = "إضافة",
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = PlantAccent
+                                    )
+                                }
+                            }
+                        }
+
+                        items(imageUris.size) { index ->
+                            val uriPath = imageUris[index]
+                            val bitmap = remember(uriPath) {
+                                runCatching { BitmapFactory.decodeFile(uriPath) }.getOrNull()
+                            }
+                            Box(
+                                modifier = Modifier.size(80.dp)
+                            ) {
+                                if (bitmap != null) {
+                                    Image(
+                                        bitmap = bitmap.asImageBitmap(),
+                                        contentDescription = "صورة $index",
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(16.dp)),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                } else {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(Color.LightGray, RoundedCornerShape(16.dp))
+                                    )
+                                }
+
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .padding(4.dp)
+                                        .size(22.dp)
+                                        .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(11.dp))
+                                        .clickable {
+                                            imageUris = imageUris.filterIndexed { i, _ -> i != index }
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "حذف الصورة",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(14.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Planting Date Action Card
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .clickable { showPlantingDatePicker() },
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color.White,
+                    border = BorderStroke(1.dp, PlantBorderLight)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .background(PlantLavender.copy(alpha = 0.5f), shape = RoundedCornerShape(12.dp)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.CalendarToday,
+                                    contentDescription = null,
+                                    tint = PlantAccent,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = plantedAt?.let {
+                                    val date = java.time.Instant.ofEpochMilli(it)
+                                        .atZone(java.time.ZoneId.systemDefault())
+                                        .toLocalDate()
+                                    "تاريخ الغرس: %04d/%02d/%02d".format(date.year, date.monthValue, date.dayOfMonth)
+                                } ?: "إضافة تاريخ الغرس",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = AppTextMain
+                            )
+                        }
+                        Icon(
+                            imageVector = Icons.Default.ChevronLeft,
+                            contentDescription = null,
+                            tint = PlantMuted.copy(alpha = 0.6f),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            }
+
+            // Notes Input Field
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "ملاحظات ",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTextMain
+                    )
+                    Text(
+                        text = "(اختياري)",
+                        fontSize = 12.sp,
+                        color = PlantMuted
+                    )
+                }
+                OutlinedTextField(
+                    value = notes,
+                    onValueChange = { notes = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text("اكتب تعليمات الري، التسميد، أو أي تفاصيل خاصة...", fontSize = 14.sp, color = PlantMuted.copy(alpha = 0.6f)) },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedBorderColor = PlantAccent,
+                        unfocusedBorderColor = PlantBorderLight
+                    ),
+                    minLines = 3
+                )
+            }
+
+            HorizontalDivider(color = PlantLavenderBorder.copy(alpha = 0.6f), thickness = 1.dp)
+
+            // Schedule Title Section
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = "جدول السقي",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTextMain
+                )
+                Text(
+                    text = "اختر الطريقة الأسهل لتذكيرك بالسقي.",
+                    fontSize = 14.sp,
+                    color = AppTextMuted
+                )
+            }
+
+            // Mode Toggle (Segmented Control)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(48.dp)
+                        .clickable { useWeekdays = true },
+                    shape = RoundedCornerShape(16.dp),
+                    color = if (useWeekdays) AppPrimaryBrown else Color.White.copy(alpha = 0.7f),
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = if (useWeekdays) AppPrimaryBrown else PlantLavenderBorder
+                    )
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = "أيام محددة",
+                            fontSize = 14.sp,
+                            fontWeight = if (useWeekdays) FontWeight.Bold else FontWeight.Medium,
+                            color = if (useWeekdays) Color.White else AppTextMuted
+                        )
+                    }
+                }
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(48.dp)
+                        .clickable { useWeekdays = false },
+                    shape = RoundedCornerShape(16.dp),
+                    color = if (!useWeekdays) AppPrimaryBrown else Color.White.copy(alpha = 0.7f),
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = if (!useWeekdays) AppPrimaryBrown else PlantLavenderBorder
+                    )
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = "كل عدة أيام",
+                            fontSize = 14.sp,
+                            fontWeight = if (!useWeekdays) FontWeight.Bold else FontWeight.Medium,
+                            color = if (!useWeekdays) Color.White else AppTextMuted
+                        )
+                    }
+                }
+            }
+
+            // Days Selection or Interval Input
+            if (useWeekdays) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = "اختر أيام السقي",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = AppTextMain
+                    )
+                    val days = DayOfWeek.entries
+                    days.chunked(2).forEach { row ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            row.forEach { day ->
+                                val isSelected = day in selectedDays
+                                Surface(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .height(48.dp)
+                                        .clickable {
+                                            selectedDays = if (isSelected) selectedDays - day else selectedDays + day
+                                        },
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = if (isSelected) PlantLavenderActive else Color.White.copy(alpha = 0.6f),
+                                    border = BorderStroke(1.dp, PlantLavenderBorder)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Text(
+                                            text = day.arabicLabel(),
+                                            fontSize = 14.sp,
+                                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                            color = if (isSelected) AppTextMain else AppTextMuted
+                                        )
+                                    }
+                                }
+                            }
+                            if (row.size == 1) Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                    if (selectedDays.isEmpty()) {
+                        Text(
+                            text = "اختر يوماً واحداً على الأقل.",
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            } else {
                 OutlinedTextField(
                     value = intervalText,
                     onValueChange = { value ->
                         if (value.all(Char::isDigit) && value.length <= 2) intervalText = value
                     },
-                    Modifier.fillMaxWidth(),
-                    label = { Text("السقي كل كم يوم؟") },
-                    supportingText = { Text("مثال: 3 يعني السقي كل ثلاثة أيام") },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("السقي كل كم يوم؟", fontSize = 14.sp) },
+                    supportingText = { Text("مثال: 3 يعني السقي كل ثلاثة أيام", fontSize = 12.sp) },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedBorderColor = PlantAccent,
+                        unfocusedBorderColor = PlantBorderLight
+                    ),
                     singleLine = true
                 )
-            } else {
-                Text("اختر أيام السقي", style = MaterialTheme.typography.titleMedium)
-                val days = DayOfWeek.entries
-                days.chunked(2).forEach { row ->
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        row.forEach { day ->
-                            FilterChip(
-                                selected = day in selectedDays,
-                                onClick = {
-                                    selectedDays = if (day in selectedDays) {
-                                        selectedDays - day
-                                    } else {
-                                        selectedDays + day
-                                    }
-                                },
-                                label = { Text(day.arabicLabel()) },
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        if (row.size == 1) Spacer(Modifier.weight(1f))
-                    }
-                }
-                if (selectedDays.isEmpty()) {
-                    Text(
-                        "اختر يوماً واحداً على الأقل.",
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
             }
 
-            HorizontalDivider()
+            HorizontalDivider(color = PlantLavenderBorder.copy(alpha = 0.6f), thickness = 1.dp)
 
+            // Seasonal Adjustment Switch Card
             Row(
-                Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(Modifier.weight(1f)) {
-                    Text("تغيير السقي حسب الفصل", style = MaterialTheme.typography.titleMedium)
-                    Text("اضبط عدد الأيام لكل فصل.", style = MaterialTheme.typography.bodyMedium)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "تغيير السقي حسب الفصل",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = AppTextMain
+                    )
+                    Text(
+                        text = "اضبط عدد الأيام لكل فصل.",
+                        fontSize = 12.sp,
+                        color = AppTextMuted
+                    )
                 }
-                Switch(checked = seasonalEnabled, onCheckedChange = { seasonalEnabled = it })
+                Switch(
+                    checked = seasonalEnabled,
+                    onCheckedChange = { enabled ->
+                        seasonalEnabled = enabled
+                        if (enabled && springInterval.isBlank() && summerInterval.isBlank() && autumnInterval.isBlank() && winterInterval.isBlank()) {
+                            val base = intervalText.toIntOrNull() ?: 3
+                            val defaults = WateringCalculator.defaultSeasonalIntervals(base)
+                            springInterval = defaults.spring.toString()
+                            summerInterval = defaults.summer.toString()
+                            autumnInterval = defaults.autumn.toString()
+                            winterInterval = defaults.winter.toString()
+                        }
+                    },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = AppPrimaryBrown,
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = PlantLavenderBorder
+                    )
+                )
             }
 
             if (seasonalEnabled && !useWeekdays) {
-                Text("السقي كل كم يوم في كل فصل؟", style = MaterialTheme.typography.titleMedium)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "السقي كل كم يوم في كل فصل؟",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = AppTextMain
+                    )
+                    TextButton(
+                        onClick = {
+                            val base = intervalText.toIntOrNull() ?: 3
+                            val defaults = WateringCalculator.defaultSeasonalIntervals(base)
+                            springInterval = defaults.spring.toString()
+                            summerInterval = defaults.summer.toString()
+                            autumnInterval = defaults.autumn.toString()
+                            winterInterval = defaults.winter.toString()
+                        }
+                    ) {
+                        Text(
+                            text = "تطبيقات تلقائية",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = AppPrimaryBrown
+                        )
+                    }
+                }
                 SeasonField("الربيع", springInterval) { springInterval = it }
                 SeasonField("الصيف", summerInterval) { summerInterval = it }
                 SeasonField("الخريف", autumnInterval) { autumnInterval = it }
                 SeasonField("الشتاء", winterInterval) { winterInterval = it }
             }
 
-            OutlinedButton(
-                onClick = { showTimePicker = true },
-                Modifier.fillMaxWidth().height(56.dp)
+            // Reminder Time Trigger Button
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp)
+                    .clickable { showTimePicker = true },
+                shape = RoundedCornerShape(16.dp),
+                color = Color.White.copy(alpha = 0.8f),
+                border = BorderStroke(1.dp, PlantLavenderBorder)
             ) {
-                Text("وقت التذكير: %02d:%02d".format(wateringHour, wateringMinute))
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccessTime,
+                        contentDescription = null,
+                        tint = AppPrimaryBrown,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "وقت التذكير: ",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = AppTextMain
+                    )
+                    Text(
+                        text = "%02d:%02d".format(wateringHour, wateringMinute),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTextMain
+                    )
+                }
             }
 
+            // Save Plant Button
             Button(
                 onClick = {
                     val interval = intervalText.toIntOrNull()?.coerceIn(1, 99)
@@ -242,7 +1018,7 @@ fun PlantFormScreen(
                         category,
                         location.trim().ifBlank { null },
                         notes.trim().ifBlank { null },
-                        imageUri,
+                        if (imageUris.isEmpty()) null else imageUris.joinToString("|"),
                         plantedAt,
                         if (useWeekdays) null else interval,
                         mask,
@@ -256,13 +1032,27 @@ fun PlantFormScreen(
                     )
                 },
                 enabled = name.isNotBlank() &&
-                    (useWeekdays && selectedDays.isNotEmpty() || !useWeekdays && intervalText.toIntOrNull()?.let { it > 0 } == true),
-                Modifier.fillMaxWidth().height(60.dp)
+                        (useWeekdays && selectedDays.isNotEmpty() || !useWeekdays && intervalText.toIntOrNull()?.let { it > 0 } == true),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = AppPrimaryBrown,
+                    contentColor = Color.White,
+                    disabledContainerColor = AppPrimaryBrown.copy(alpha = 0.4f),
+                    disabledContentColor = Color.White.copy(alpha = 0.7f)
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp, pressedElevation = 1.dp)
             ) {
-                Text(if (initialPlant == null) "حفظ النبتة" else "حفظ التعديلات", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = if (initialPlant == null) "حفظ النبتة" else "حفظ التعديلات",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
@@ -290,8 +1080,26 @@ private fun SeasonField(label: String, value: String, onValueChange: (String) ->
         value = value,
         onValueChange = { if (it.all(Char::isDigit) && it.length <= 2) onValueChange(it) },
         modifier = Modifier.fillMaxWidth(),
-        label = { Text(label) },
-        suffix = { Text("يوم") },
+        label = { Text(label, fontSize = 14.sp) },
+        suffix = { Text("يوم", fontSize = 12.sp) },
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.White,
+            focusedBorderColor = PlantAccent,
+            unfocusedBorderColor = PlantBorderLight
+        ),
         singleLine = true
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PlantFormScreenPreview() {
+    ShjiratiTheme {
+        PlantFormScreen(
+            onSave = { _, _, _, _, _, _, _, _, _, _, _, _, _, _, _ -> },
+            onBack = {}
+        )
+    }
 }

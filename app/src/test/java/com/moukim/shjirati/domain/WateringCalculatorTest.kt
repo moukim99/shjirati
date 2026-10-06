@@ -83,4 +83,13 @@ class WateringCalculatorTest {
             )
         )
     }
+
+    @Test
+    fun default_seasonal_intervals_are_calculated_correctly() {
+        val defaults = WateringCalculator.defaultSeasonalIntervals(10)
+        org.junit.Assert.assertEquals(10, defaults.spring)
+        org.junit.Assert.assertEquals(6, defaults.summer)
+        org.junit.Assert.assertEquals(12, defaults.autumn)
+        org.junit.Assert.assertEquals(18, defaults.winter)
+    }
 }

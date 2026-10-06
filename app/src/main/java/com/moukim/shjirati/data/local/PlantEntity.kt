@@ -30,4 +30,7 @@ data class PlantEntity(
     val lastWateredAtEpochMillis: Long? = null,
     val createdAtEpochMillis: Long,
     val updatedAtEpochMillis: Long
-)
+) {
+    val imageUrisList: List<String>
+        get() = imageUri?.split("|")?.filter { it.isNotBlank() } ?: emptyList()
+}

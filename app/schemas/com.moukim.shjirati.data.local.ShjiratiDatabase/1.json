@@ -1,0 +1,164 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "11111111111111111111111111111111",
+    "entities": [
+      {
+        "tableName": "plants",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `category` TEXT NOT NULL, `species` TEXT, `imageUri` TEXT, `plantedAtEpochMillis` INTEGER, `location` TEXT, `notes` TEXT, `wateringIntervalDays` INTEGER, `wateringDaysMask` INTEGER NOT NULL, `wateringHour` INTEGER NOT NULL, `wateringMinute` INTEGER NOT NULL, `wateringAmountMl` INTEGER, `wateringDurationMinutes` INTEGER, `seasonalScheduleEnabled` INTEGER NOT NULL, `springIntervalDays` INTEGER, `summerIntervalDays` INTEGER, `autumnIntervalDays` INTEGER, `winterIntervalDays` INTEGER, `lastWateredAtEpochMillis` INTEGER, `createdAtEpochMillis` INTEGER NOT NULL, `updatedAtEpochMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "species",
+            "columnName": "species",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "plantedAtEpochMillis",
+            "columnName": "plantedAtEpochMillis",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "wateringIntervalDays",
+            "columnName": "wateringIntervalDays",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "wateringDaysMask",
+            "columnName": "wateringDaysMask",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wateringHour",
+            "columnName": "wateringHour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wateringMinute",
+            "columnName": "wateringMinute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wateringAmountMl",
+            "columnName": "wateringAmountMl",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "wateringDurationMinutes",
+            "columnName": "wateringDurationMinutes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "seasonalScheduleEnabled",
+            "columnName": "seasonalScheduleEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "springIntervalDays",
+            "columnName": "springIntervalDays",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "summerIntervalDays",
+            "columnName": "summerIntervalDays",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "autumnIntervalDays",
+            "columnName": "autumnIntervalDays",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "winterIntervalDays",
+            "columnName": "winterIntervalDays",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastWateredAtEpochMillis",
+            "columnName": "lastWateredAtEpochMillis",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdAtEpochMillis",
+            "columnName": "createdAtEpochMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAtEpochMillis",
+            "columnName": "updatedAtEpochMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_plants_category",
+            "unique": false,
+            "columnNames": [
+              "category"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_plants_category` ON `${TABLE_NAME}` (`category`)"
+          },
+          {
+            "name": "index_plants_name",
+            "unique": false,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_plants_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '11111111111111111111111111111111')"
+    ]
+  }
+}

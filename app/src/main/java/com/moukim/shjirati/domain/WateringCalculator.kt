@@ -36,6 +36,28 @@ object WateringCalculator {
         }
     }
 
+    /**
+     * يحسب الجداول التلقائية الموصى بها مسبقاً لكل فصل بناءً على المعدل الأساسي للسقي:
+     * - الصيف: سقي أكثر تكراراً (60% من الفترة الأساسية)
+     * - الربيع: الفترة الأساسية (100%)
+     * - الخريف: سقي أقل تكراراً (125% من الفترة الأساسية)
+     * - الشتاء: سقي متباعد (180% من الفترة الأساسية)
+     */
+    fun defaultSeasonalIntervals(baseInterval: Int): SeasonalIntervals {
+        val spring = baseInterval.coerceAtLeast(1)
+        val summer = (baseInterval * 0.6).toInt().coerceAtLeast(1)
+        val autumn = (baseInterval * 1.25).toInt().coerceAtLeast(1)
+        val winter = (baseInterval * 1.8).toInt().coerceAtLeast(spring + 1)
+        return SeasonalIntervals(spring = spring, summer = summer, autumn = autumn, winter = winter)
+    }
+
     fun weekdayMask(days: Set<DayOfWeek>): Int =
         days.fold(0) { mask, day -> mask or (1 shl (day.value - 1)) }
 }
+
+data class SeasonalIntervals(
+    val spring: Int,
+    val summer: Int,
+    val autumn: Int,
+    val winter: Int
+)

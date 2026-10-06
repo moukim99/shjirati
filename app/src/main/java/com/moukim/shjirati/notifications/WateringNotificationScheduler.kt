@@ -18,13 +18,10 @@ object WateringNotificationScheduler {
     fun schedule(context: Context, plant: PlantEntity) {
         val trigger = nextTrigger(plant)
         val pending = pendingIntent(context, plant)
-        context.getSystemService(AlarmManager::class.java).cancel(pending)
+        val alarmManager = context.getSystemService(AlarmManager::class.java)
+        alarmManager.cancel(pending)
         scheduleMissedCheck(context, plant)
-        context.getSystemService(AlarmManager::class.java).setAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            trigger.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
-            pending
-        )
+        setAlarm(alarmManager, trigger.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), pending)
     }
 
     fun cancel(context: Context, plantId: String) {
@@ -76,11 +73,7 @@ object WateringNotificationScheduler {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        alarmManager.setAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + delayMinutes * 60_000L,
-            pending
-        )
+        setAlarm(alarmManager, System.currentTimeMillis() + delayMinutes * 60_000L, pending)
     }
 
     private fun scheduleMissedCheck(context: Context, plant: PlantEntity) {
@@ -93,11 +86,23 @@ object WateringNotificationScheduler {
                 .putExtra(WateringAlarmReceiver.EXTRA_PLANT_ID, plant.id),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        context.getSystemService(AlarmManager::class.java).setAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            trigger.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
-            pending
-        )
+        setAlarm(context.getSystemService(AlarmManager::class.java), trigger.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), pending)
+    }
+
+    private fun setAlarm(alarmManager: AlarmManager, triggerTimeMillis: Long, pendingIntent: PendingIntent) {
+        val canExact = if (android.os.Build.VERSION.SDK_INT >= 31) {
+            alarmManager.canScheduleExactAlarms()
+        } else true
+
+        if (canExact) {
+            try {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTimeMillis, pendingIntent)
+            } catch (_: SecurityException) {
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTimeMillis, pendingIntent)
+            }
+        } else {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTimeMillis, pendingIntent)
+        }
     }
 
     private fun requestCode(id: String): Int = REQUEST_BASE + id.hashCode().and(0x7FFF)
