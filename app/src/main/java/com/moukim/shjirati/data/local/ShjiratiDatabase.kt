@@ -18,6 +18,14 @@ class ShjiratiConverters {
     }
 }
 
+val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("""CREATE TABLE IF NOT EXISTS weather_daily (dateEpochDay INTEGER NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, temperatureMinC REAL, temperatureMaxC REAL, precipitationMm REAL, precipitationProbabilityPercent INTEGER, humidityMeanPercent REAL, windSpeedMaxKmh REAL, frostRisk INTEGER NOT NULL, heatRisk INTEGER NOT NULL, downloadedAtEpochMillis INTEGER NOT NULL, PRIMARY KEY(dateEpochDay, latitude, longitude))""")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_weather_daily_dateEpochDay ON weather_daily(dateEpochDay)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_weather_daily_downloadedAtEpochMillis ON weather_daily(downloadedAtEpochMillis)")
+    }
+}
+
 val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE plants ADD COLUMN expectedDateEpochMillis INTEGER DEFAULT NULL")
@@ -28,8 +36,8 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
 }
 
 @Database(
-    entities = [PlantEntity::class, WateringLogEntity::class],
-    version = 3,
+    entities = [PlantEntity::class, WateringLogEntity::class, WeatherDailyEntity::class],
+    version = 4,
     exportSchema = true
 )
 @androidx.room.TypeConverters(ShjiratiConverters::class)
