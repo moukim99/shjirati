@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "datasetVersion": "0.3.0",
+  "datasetVersion": "0.4.0",
   "language": "ar",
-  "description": "Shjirati offline Arabic plant catalog; curated set of 100 common Mediterranean, household, culinary, and garden plants.",
+  "description": "Shjirati offline Arabic plant catalog; curated set of 130 common Mediterranean, household, culinary, ornamental, and garden plants.",
   "plants": [
     {
       "id": "solanum_lycopersicum",
@@ -1022,6 +1022,315 @@
       "category": "HERB",
       "dateMode": "GERMINATION",
       "imageAsset": "plants/ocimum_tenuiflorum.webp"
+    },
+    {
+      "id": "aloe_officinalis",
+      "arabicName": "صَبِر",
+      "aliases": [
+        "ألوفيرا"
+      ],
+      "scientificName": "Aloe officinalis",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/aloe_officinalis.webp"
+    },
+    {
+      "id": "pistacia_vera",
+      "arabicName": "فستق",
+      "aliases": [
+        "فستق حلبي"
+      ],
+      "scientificName": "Pistacia vera",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/pistacia_vera.webp"
+    },
+    {
+      "id": "juglans_regia",
+      "arabicName": "جوز",
+      "aliases": [
+        "عين الجمل"
+      ],
+      "scientificName": "Juglans regia",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/juglans_regia.webp"
+    },
+    {
+      "id": "corylus_avellana",
+      "arabicName": "بندق",
+      "aliases": [],
+      "scientificName": "Corylus avellana",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/corylus_avellana.webp"
+    },
+    {
+      "id": "castanea_sativa",
+      "arabicName": "كستناء",
+      "aliases": [
+        "أبو فروة"
+      ],
+      "scientificName": "Castanea sativa",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/castanea_sativa.webp"
+    },
+    {
+      "id": "avena_sativa",
+      "arabicName": "شوفان",
+      "aliases": [],
+      "scientificName": "Avena sativa",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/avena_sativa.webp"
+    },
+    {
+      "id": "triticum_aestivum",
+      "arabicName": "قمح",
+      "aliases": [
+        "الحنطة"
+      ],
+      "scientificName": "Triticum aestivum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/triticum_aestivum.webp"
+    },
+    {
+      "id": "hordeum_vulgare",
+      "arabicName": "شعير",
+      "aliases": [],
+      "scientificName": "Hordeum vulgare",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/hordeum_vulgare.webp"
+    },
+    {
+      "id": "sorghum_bicolor",
+      "arabicName": "ذرة رفيعة",
+      "aliases": [
+        "سورغم"
+      ],
+      "scientificName": "Sorghum bicolor",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/sorghum_bicolor.webp"
+    },
+    {
+      "id": "vicia_sativa",
+      "arabicName": "بيقية",
+      "aliases": [
+        "كرسنة"
+      ],
+      "scientificName": "Vicia sativa",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/vicia_sativa.webp"
+    },
+    {
+      "id": "vigna_radiata",
+      "arabicName": "ماش",
+      "aliases": [
+        "فول مونج"
+      ],
+      "scientificName": "Vigna radiata",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/vigna_radiata.webp"
+    },
+    {
+      "id": "brassica_napus",
+      "arabicName": "لفت زيتي",
+      "aliases": [
+        "كانولا"
+      ],
+      "scientificName": "Brassica napus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_napus.webp"
+    },
+    {
+      "id": "brassica_oleracea_cabbage_red",
+      "arabicName": "ملفوف أحمر",
+      "aliases": [
+        "كرنب أحمر"
+      ],
+      "scientificName": "Brassica oleracea",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_oleracea_cabbage_red.webp"
+    },
+    {
+      "id": "allium_schoenoprasum",
+      "arabicName": "ثوم معمر",
+      "aliases": [
+        "ثوم قصبي"
+      ],
+      "scientificName": "Allium schoenoprasum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/allium_schoenoprasum.webp"
+    },
+    {
+      "id": "anethum_graveolens",
+      "arabicName": "شبت",
+      "aliases": [
+        "شبث"
+      ],
+      "scientificName": "Anethum graveolens",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/anethum_graveolens.webp"
+    },
+    {
+      "id": "carum_carvi",
+      "arabicName": "كراوية",
+      "aliases": [],
+      "scientificName": "Carum carvi",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/carum_carvi.webp"
+    },
+    {
+      "id": "pimpinella_anisum",
+      "arabicName": "يانسون",
+      "aliases": [
+        "أنيسون"
+      ],
+      "scientificName": "Pimpinella anisum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/pimpinella_anisum.webp"
+    },
+    {
+      "id": "trigonella_foenum_graecum",
+      "arabicName": "حلبة",
+      "aliases": [],
+      "scientificName": "Trigonella foenum-graecum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/trigonella_foenum_graecum.webp"
+    },
+    {
+      "id": "papaver_somniferum",
+      "arabicName": "خشخاش",
+      "aliases": [
+        "خشخاش الزينة"
+      ],
+      "scientificName": "Papaver somniferum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/papaver_somniferum.webp"
+    },
+    {
+      "id": "matricaria_chamomilla",
+      "arabicName": "بابونج",
+      "aliases": [
+        "كاموميل"
+      ],
+      "scientificName": "Matricaria chamomilla",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/matricaria_chamomilla.webp"
+    },
+    {
+      "id": "calendula_officinalis",
+      "arabicName": "آذريون",
+      "aliases": [
+        "قطيفة طبية"
+      ],
+      "scientificName": "Calendula officinalis",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/calendula_officinalis.webp"
+    },
+    {
+      "id": "echinacea_purpurea",
+      "arabicName": "إشنسيا",
+      "aliases": [
+        "القنفذية الأرجوانية"
+      ],
+      "scientificName": "Echinacea purpurea",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/echinacea_purpurea.webp"
+    },
+    {
+      "id": "alcea_rosea",
+      "arabicName": "خطمي",
+      "aliases": [
+        "خطمية"
+      ],
+      "scientificName": "Alcea rosea",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/alcea_rosea.webp"
+    },
+    {
+      "id": "jasminum_officinale",
+      "arabicName": "ياسمين",
+      "aliases": [
+        "الياسمين الأبيض"
+      ],
+      "scientificName": "Jasminum officinale",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/jasminum_officinale.webp"
+    },
+    {
+      "id": "rosa_damascena",
+      "arabicName": "ورد دمشقي",
+      "aliases": [
+        "ورد جوري"
+      ],
+      "scientificName": "Rosa × damascena",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/rosa_damascena.webp"
+    },
+    {
+      "id": "pelargonium_zonale",
+      "arabicName": "جيرانيوم",
+      "aliases": [
+        "إبرة الراعي"
+      ],
+      "scientificName": "Pelargonium zonale",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/pelargonium_zonale.webp"
+    },
+    {
+      "id": "bougainvillea_spectabilis",
+      "arabicName": "جهنمية",
+      "aliases": [
+        "بوجنفيليا"
+      ],
+      "scientificName": "Bougainvillea spectabilis",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/bougainvillea_spectabilis.webp"
+    },
+    {
+      "id": "hibiscus_rosa_sinensis",
+      "arabicName": "كركديه",
+      "aliases": [
+        "ورد صيني"
+      ],
+      "scientificName": "Hibiscus × rosa-sinensis",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/hibiscus_rosa_sinensis.webp"
+    },
+    {
+      "id": "gardenia_jasminoides",
+      "arabicName": "غاردينيا",
+      "aliases": [
+        "جاردينيا"
+      ],
+      "scientificName": "Gardenia jasminoides",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/gardenia_jasminoides.webp"
     }
   ]
 }
