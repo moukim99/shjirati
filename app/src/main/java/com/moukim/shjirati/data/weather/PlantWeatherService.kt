@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /**
- * Combines locally cached weather with the plant-specific weather profile.
- * It deliberately does not own location selection or permissions.
+ * Combines the saved garden location, cached weather and plant-specific profile.
+ * Location selection remains a user-controlled setting and never requests permission.
  */
 class PlantWeatherService(
     private val weatherRepository: WeatherRepository,
@@ -14,19 +14,21 @@ class PlantWeatherService(
 ) {
     private val profileRepository = PlantWeatherProfileRepository(context)
 
-    fun observeAdvice(
-        plantId: String,
-        location: WeatherLocation
-    ): Flow<List<PlantWeatherAdvice>> {
+    fun currentLocation(): WeatherLocation? =
+        weatherRepository.currentLocation()
+
+    fun observeAdvice(plantId: String): Flow<List<PlantWeatherAdvice>> {
         val profile = profileRepository.getByPlantId(plantId)
-        return weatherRepository.observe(location).map { days ->
+        return weatherRepository.observe().map { days ->
             PlantWeatherAdvisor.adviseAll(plantId, days, profile)
         }
     }
 
-    suspend fun refresh(location: WeatherLocation): WeatherResult {
-        return weatherRepository.refresh(location)
-    }
+    suspend fun refresh(): WeatherResult =
+        weatherRepository.refresh()
+
+    suspend fun cachedWeather(): List<WeatherDaily> =
+        weatherRepository.getCached()
 
     fun profileFor(plantId: String): PlantWeatherProfile? =
         profileRepository.getByPlantId(plantId)
