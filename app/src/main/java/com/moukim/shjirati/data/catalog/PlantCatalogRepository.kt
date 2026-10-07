@@ -18,12 +18,18 @@ class PlantCatalogRepository(private val context: Context) {
     fun search(query: String): List<PlantCatalogEntry> {
         val q = query.trim()
         if (q.isEmpty()) return getAll()
-        return getAll().filter {
+        return cachedEntries.filter {
             it.arabicName.contains(q, true) ||
                 it.aliases.any { alias -> alias.contains(q, true) } ||
                 it.scientificName.contains(q, true)
         }
     }
+
+    fun imageAssetExists(entry: PlantCatalogEntry): Boolean =
+        runCatching { context.assets.open(entry.imageAsset).use { true } }.getOrDefault(false)
+
+    fun entriesWithMissingImages(): List<PlantCatalogEntry> =
+        cachedEntries.filterNot(::imageAssetExists)
 
     private fun JSONObject.toEntry(): PlantCatalogEntry {
         val a = optJSONArray("aliases") ?: JSONArray()
