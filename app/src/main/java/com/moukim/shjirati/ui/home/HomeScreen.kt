@@ -318,7 +318,6 @@ fun HomeScreen(
 }
 
 @Composable
-@Composable
 private fun DailySummaryCard(plants: List<PlantEntity>, dueCount: Int) {
     val today = LocalDate.now()
     val wateredToday = plants.count { plant ->
@@ -568,7 +567,9 @@ fun HomeScreenEmptyPreview() {
             onAddPlant = {},
             onWater = {},
             onSelectPlant = {},
-            onGardenLocation = {}
+            onGardenLocation = {},
+            onWeather = {},
+            onAssistant = {}
         )
     }
 }
