@@ -2,6 +2,7 @@ package com.moukim.shjirati.assistant
 
 import com.moukim.shjirati.data.catalog.CatalogDateMode
 import com.moukim.shjirati.data.catalog.PlantCatalogEntry
+import com.moukim.shjirati.data.catalog.PlantArticle
 
 sealed interface PlantAssistantResponse {
     data class Answer(val text: String) : PlantAssistantResponse
@@ -9,7 +10,7 @@ sealed interface PlantAssistantResponse {
 }
 
 class PlantAssistantResponseBuilder {
-    fun build(decision: JebDecision, plant: PlantCatalogEntry?): PlantAssistantResponse {
+    fun build(decision: JebDecision, plant: PlantCatalogEntry?, article: PlantArticle? = null): PlantAssistantResponse {
         if (!decision.isConfident) return PlantAssistantResponse.NeedClarification(
             "لم أفهم السؤال بشكل كافٍ. حاول كتابة اسم النبتة وما تريد معرفته عنها."
         )
@@ -17,12 +18,54 @@ class PlantAssistantResponseBuilder {
             "لم أتعرف على اسم النبتة في قاعدة بيانات شجيرتي."
         )
         return when (decision.intent) {
+            JebIntent.PLANT_INFO -> buildInfo(plant, article)
             JebIntent.GERMINATION -> buildGermination(plant)
             JebIntent.HARVEST -> buildHarvest(plant)
+            JebIntent.WATERING -> buildArticleField(plant, article?.watering, "الري")
+            JebIntent.PLANTING -> buildPlanting(plant, article)
             else -> PlantAssistantResponse.NeedClarification(
                 "هذه المعلومة غير متاحة حاليًا لهذه النبتة في قاعدة بيانات شجيرتي."
             )
         }
+    }
+
+    private fun buildInfo(plant: PlantCatalogEntry, article: PlantArticle?): PlantAssistantResponse {
+        if (article == null) return PlantAssistantResponse.NeedClarification(
+            "لا توجد مقالة معلوماتية مسجلة لـ" + plant.arabicName + " حاليًا."
+        )
+        val parts = listOf(
+            article.description.takeIf { it.isNotBlank() },
+            article.plantType.takeIf { it.isNotBlank() }?.let { "النوع: $it" },
+            article.soil.takeIf { it.isNotBlank() }?.let { "التربة: $it" },
+            article.sunlight.takeIf { it.isNotBlank() }?.let { "الإضاءة: $it" },
+            article.watering.takeIf { it.isNotBlank() }?.let { "الري: $it" }
+        ).filterNotNull()
+        return if (parts.isEmpty()) PlantAssistantResponse.NeedClarification(
+            "لا توجد معلومات كافية لـ" + plant.arabicName + " حاليًا."
+        ) else PlantAssistantResponse.Answer(parts.joinToString("\n\n"))
+    }
+
+    private fun buildArticleField(plant: PlantCatalogEntry, value: String?, label: String): PlantAssistantResponse {
+        return if (!value.isNullOrBlank()) PlantAssistantResponse.Answer(
+            label + " لـ" + plant.arabicName + ": " + value
+        ) else PlantAssistantResponse.NeedClarification(
+            "لا توجد معلومة موثقة عن " + label + " لـ" + plant.arabicName + " حاليًا."
+        )
+    }
+
+    private fun buildPlanting(plant: PlantCatalogEntry, article: PlantArticle?): PlantAssistantResponse {
+        if (article == null) return PlantAssistantResponse.NeedClarification(
+            "لا توجد معلومات زراعة مسجلة لـ" + plant.arabicName + " حاليًا."
+        )
+        val parts = listOf(
+            article.plantingSeason.takeIf { it.isNotBlank() }?.let { "الموسم: $it" },
+            article.plantingMethod.takeIf { it.isNotBlank() }?.let { "الطريقة: $it" },
+            article.seedDepth.takeIf { it.isNotBlank() }?.let { "عمق البذور: $it" },
+            article.spacing.takeIf { it.isNotBlank() }?.let { "المسافة: $it" }
+        ).filterNotNull()
+        return if (parts.isEmpty()) PlantAssistantResponse.NeedClarification(
+            "لا توجد معلومات زراعة كافية لـ" + plant.arabicName + " حاليًا."
+        ) else PlantAssistantResponse.Answer(parts.joinToString("\n"))
     }
 
     private fun buildGermination(plant: PlantCatalogEntry): PlantAssistantResponse {
