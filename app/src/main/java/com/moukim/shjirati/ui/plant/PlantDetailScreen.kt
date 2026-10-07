@@ -443,7 +443,7 @@ private fun WeatherAdviceSection(advice: List<PlantWeatherAdvice>) {
             } else {
                 warnings.forEach { item ->
                     val date = LocalDate.ofEpochDay(item.dateEpochDay)
-                    Text("• \\${date.dayOfMonth}/\\${date.monthValue}: \\${item.message}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                    Text("• ${date.dayOfMonth}/${date.monthValue}: ${item.message}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                 }
             }
             if (advice.size > warnings.size && warnings.isNotEmpty()) {
