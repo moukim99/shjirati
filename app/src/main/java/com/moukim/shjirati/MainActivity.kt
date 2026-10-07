@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moukim.shjirati.data.PlantRepositoryImpl
+import com.moukim.shjirati.data.catalog.PlantCatalogRepository
 import com.moukim.shjirati.data.local.DatabaseProvider
 import com.moukim.shjirati.notifications.WateringAlarmReceiver
 import com.moukim.shjirati.ui.home.HomeScreen
@@ -31,9 +32,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         initialPlantId.value = intent?.getStringExtra(WateringAlarmReceiver.EXTRA_PLANT_ID)
         val repository = PlantRepositoryImpl(DatabaseProvider.get(this).dao())
+        val catalogRepository = PlantCatalogRepository(this)
         setContent {
             ShjiratiTheme {
-                ShjiratiApp(repository, initialPlantId)
+                ShjiratiApp(repository, catalogRepository, initialPlantId)
             }
         }
     }
@@ -50,6 +52,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun ShjiratiApp(
     repository: PlantRepositoryImpl,
+    catalogRepository: PlantCatalogRepository,
     targetPlantIdFlow: MutableStateFlow<String?>
 ) {
     var addingPlant by remember { mutableStateOf(false) }
@@ -98,6 +101,7 @@ private fun ShjiratiApp(
         val plant = editingPlant!!
         PlantFormScreen(
             initialPlant = plant,
+            catalogRepository = catalogRepository,
             onSave = { name, category, location, notes, imageUri, plantedAt, expectedDate, isFruitBearing, icon, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
                 vm.updatePlant(plant, name, category, location, notes, imageUri, plantedAt, expectedDate, isFruitBearing, icon, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
                 editingPlant = null
@@ -116,6 +120,7 @@ private fun ShjiratiApp(
         )
     } else if (addingPlant) {
         PlantFormScreen(
+            catalogRepository = catalogRepository,
             onSave = { name, category, location, notes, imageUri, plantedAt, expectedDate, isFruitBearing, icon, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter ->
                 vm.savePlant(name, category, location, notes, imageUri, plantedAt, expectedDate, isFruitBearing, icon, interval, daysMask, hour, minute, seasonalEnabled, spring, summer, autumn, winter)
                 addingPlant = false

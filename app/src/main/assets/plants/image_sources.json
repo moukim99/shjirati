@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "policy": "Only verified openly licensed images may be bundled. Attribution must remain with the app.",
+  "sources": [
+    {
+      "plantId": "solanum_lycopersicum",
+      "file": "plants/solanum_lycopersicum.webp",
+      "source": "Wikimedia Commons",
+      "sourceFile": "Tomat (Solanum lycopersicum) 01.jpg",
+      "license": "CC BY-SA 4.0",
+      "reference": "https://commons.wikimedia.org/wiki/File:Tomat_(Solanum_lycopersicum)_01.jpg"
+    },
+    {
+      "plantId": "solanum_tuberosum",
+      "file": "plants/solanum_tuberosum.webp",
+      "source": "Wikimedia Commons",
+      "sourceFile": "Solanum tuberosum 15-p.bot-solana.tuber-20.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Cephas",
+      "reference": "https://commons.wikimedia.org/wiki/File:Solanum_tuberosum_15-p.bot-solana.tuber-20.jpg"
+    },
+    {
+      "plantId": "olea_europaea",
+      "file": "plants/olea_europaea.webp",
+      "source": "Wikimedia Commons",
+      "sourceFile": "Olea europaea 007.JPG",
+      "license": "CC BY-SA 3.0",
+      "reference": "https://commons.wikimedia.org/wiki/File:Olea_europaea_007.JPG"
+    },
+    {
+      "plantId": "citrus_limon",
+      "file": "plants/citrus_limon.webp",
+      "source": "Wikimedia Commons",
+      "sourceFile": "Lemon (Citrus limon aka Citrus × limon).jpg",
+      "license": "CC BY 4.0",
+      "author": "Atlas Þə Biologist",
+      "reference": "https://commons.wikimedia.org/wiki/File:Lemon_(Citrus_limon_aka_Citrus_%C3%97_limon).jpg"
+    }
+  ]
+}

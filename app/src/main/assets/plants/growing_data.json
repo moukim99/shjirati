@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "description": "Verified starter growing data. Values are ranges and can vary by cultivar, temperature, growing method, and local conditions. Source references are retained for auditability.",
+  "plants": [
+    {
+      "plantId": "solanum_lycopersicum",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 12,
+      "maturityDaysMin": 60,
+      "maturityDaysMax": 90,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home; UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "cucumis_sativus",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 10,
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 60,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home; UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "solanum_melongena",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 10,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home"
+    },
+    {
+      "plantId": "lactuca_sativa",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 8,
+      "maturityDaysMin": 40,
+      "maturityDaysMax": 60,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home; UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "capsicum_annuum",
+      "germinationDaysMin": 9,
+      "germinationDaysMax": 14,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home"
+    },
+    {
+      "plantId": "raphanus_sativus",
+      "germinationDaysMin": 2,
+      "germinationDaysMax": 3,
+      "maturityDaysMin": 30,
+      "maturityDaysMax": 60,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home; UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "spinacia_oleracea",
+      "maturityDaysMin": 35,
+      "maturityDaysMax": 45,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "pisum_sativum",
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 80,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "phaseolus_vulgaris",
+      "maturityDaysMin": 45,
+      "maturityDaysMax": 65,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "brassica_oleracea",
+      "germinationDaysMin": 4,
+      "germinationDaysMax": 10,
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 90,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home; UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "brassica_oleracea_botrytis",
+      "maturityDaysMin": 60,
+      "maturityDaysMax": 80,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "brassica_oleracea_italica",
+      "germinationDaysMin": 7,
+      "germinationDaysMax": 10,
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 70,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home; UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "beta_vulgaris",
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 60,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "daucus_carota",
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 75,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "brassica_rapa",
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 60,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "allium_cepa",
+      "germinationDaysMin": 7,
+      "germinationDaysMax": 10,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home"
+    },
+    {
+      "plantId": "cucurbita_pepo",
+      "germinationDaysMin": 4,
+      "germinationDaysMax": 6,
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 65,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home; UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "cucurbita_moschata",
+      "maturityDaysMin": 75,
+      "maturityDaysMax": 80,
+      "source": "UMN Extension — https://extension.umn.edu/vegetable-growing-guides-farmers/crop-and-field-planning-tools-vegetable-farmers"
+    },
+    {
+      "plantId": "cucurbita_maxima",
+      "maturityDaysMin": 75,
+      "maturityDaysMax": 80,
+      "source": "UMN Extension — https://extension.umn.edu/vegetable-growing-guides-farmers/crop-and-field-planning-tools-vegetable-farmers"
+    },
+    {
+      "plantId": "citrullus_lanatus",
+      "maturityDaysMin": 85,
+      "maturityDaysMax": 95,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/home-vegetable-garden-variety-recommendations-for-utah"
+    },
+    {
+      "plantId": "cucumis_melo",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 8,
+      "maturityDaysMin": 70,
+      "maturityDaysMax": 85,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home; UMN Extension — https://extension.umn.edu/vegetable-growing-guides-farmers/crop-and-field-planning-tools-vegetable-farmers"
+    },
+    {
+      "plantId": "zea_mays",
+      "maturityDaysMin": 60,
+      "maturityDaysMax": 100,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "apium_graveolens",
+      "germinationDaysMin": 9,
+      "germinationDaysMax": 21,
+      "source": "USU Extension — https://extension.usu.edu/yardandgarden/research/grow-your-own-transplants-at-home"
+    },
+    {
+      "plantId": "petroselinum_crispum",
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 75,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    },
+    {
+      "plantId": "solanum_tuberosum",
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 100,
+      "source": "UMN Extension — https://extension.umn.edu/vegetable-growing-guides-farmers/crop-and-field-planning-tools-vegetable-farmers"
+    },
+    {
+      "plantId": "brassica_oleracea_gongylodes",
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 60,
+      "source": "UMN Extension — https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/climate-resilience-resources-for-vegetable-growers"
+    }
+  ]
+}
