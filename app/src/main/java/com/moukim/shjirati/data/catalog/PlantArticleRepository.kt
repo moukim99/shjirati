@@ -84,5 +84,5 @@ data class PlantArticleValidationResult(
 ) {
     val isValid: Boolean
         get() = unknownArticleIds.isEmpty() &&
-            articleCount <= catalogCount
+            articleCount == catalogCount
 }
