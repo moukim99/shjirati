@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "datasetVersion": "0.4.0",
+  "datasetVersion": "0.5.0",
   "language": "ar",
-  "description": "Shjirati offline Arabic plant catalog; curated set of 130 common Mediterranean, household, culinary, ornamental, and garden plants.",
+  "description": "Shjirati offline Arabic plant catalog; curated set of 200 common Mediterranean, household, culinary, ornamental, and garden plants.",
   "plants": [
     {
       "id": "solanum_lycopersicum",
@@ -1343,6 +1343,773 @@
       "category": "VEGETABLE",
       "dateMode": "GERMINATION",
       "imageAsset": "plants/cucumis_metuliferus.webp"
+    },
+    {
+      "id": "citrus_aurantiifolia",
+      "arabicName": "ليمون أخضر",
+      "aliases": [
+        "لايم"
+      ],
+      "scientificName": "Citrus × aurantiifolia",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_aurantiifolia.webp"
+    },
+    {
+      "id": "citrus_bergamia",
+      "arabicName": "برغموت",
+      "aliases": [
+        "حمضيات البرغموت"
+      ],
+      "scientificName": "Citrus bergamia",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_bergamia.webp"
+    },
+    {
+      "id": "acca_sellowiana",
+      "arabicName": "فيجوا",
+      "aliases": [],
+      "scientificName": "Acca sellowiana",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/acca_sellowiana.webp"
+    },
+    {
+      "id": "ceratonia_siliqua",
+      "arabicName": "خروب",
+      "aliases": [
+        "خرنوب"
+      ],
+      "scientificName": "Ceratonia siliqua",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/ceratonia_siliqua.webp"
+    },
+    {
+      "id": "arbutus_unedo",
+      "arabicName": "قَطْلَب",
+      "aliases": [
+        "قطلب",
+        "شجرة الفراولة"
+      ],
+      "scientificName": "Arbutus unedo",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/arbutus_unedo.webp"
+    },
+    {
+      "id": "eriobotrya_japonica",
+      "arabicName": "بشملة",
+      "aliases": [
+        "أسكدنيا",
+        "مزاح"
+      ],
+      "scientificName": "Eriobotrya japonica",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/eriobotrya_japonica.webp"
+    },
+    {
+      "id": "ziziphus_jujuba",
+      "arabicName": "عناب",
+      "aliases": [
+        "نبق"
+      ],
+      "scientificName": "Ziziphus jujuba",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/ziziphus_jujuba.webp"
+    },
+    {
+      "id": "prunus_spinosa",
+      "arabicName": "برقوق شوكي",
+      "aliases": [
+        "سلو"
+      ],
+      "scientificName": "Prunus spinosa",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/prunus_spinosa.webp"
+    },
+    {
+      "id": "annona_cherimola",
+      "arabicName": "قشطة",
+      "aliases": [
+        "شيريمويا"
+      ],
+      "scientificName": "Annona cherimola",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/annona_cherimola.webp"
+    },
+    {
+      "id": "tamarindus_indica",
+      "arabicName": "تمر هندي",
+      "aliases": [],
+      "scientificName": "Tamarindus indica",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/tamarindus_indica.webp"
+    },
+    {
+      "id": "citrus_japonica",
+      "arabicName": "كمكوات",
+      "aliases": [
+        "برتقال ذهبي"
+      ],
+      "scientificName": "Citrus japonica",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_japonica.webp"
+    },
+    {
+      "id": "pinus_pinea",
+      "arabicName": "صنوبر مثمر",
+      "aliases": [
+        "صنوبر حلبي"
+      ],
+      "scientificName": "Pinus pinea",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/pinus_pinea.webp"
+    },
+    {
+      "id": "quercus_suber",
+      "arabicName": "فلين",
+      "aliases": [
+        "بلوط الفلين"
+      ],
+      "scientificName": "Quercus suber",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/quercus_suber.webp"
+    },
+    {
+      "id": "syzygium_cumini",
+      "arabicName": "جامون",
+      "aliases": [
+        "برقوق هندي"
+      ],
+      "scientificName": "Syzygium cumini",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/syzygium_cumini.webp"
+    },
+    {
+      "id": "carissa_macrocarpa",
+      "arabicName": "كاريسا",
+      "aliases": [
+        "برقوق ناتال"
+      ],
+      "scientificName": "Carissa macrocarpa",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/carissa_macrocarpa.webp"
+    },
+    {
+      "id": "citrus_clementina",
+      "arabicName": "كلمنتين",
+      "aliases": [
+        "كليمانتين"
+      ],
+      "scientificName": "Citrus × clementina",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_clementina.webp"
+    },
+    {
+      "id": "musa_balbisiana",
+      "arabicName": "موز بري",
+      "aliases": [],
+      "scientificName": "Musa balbisiana",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/musa_balbisiana.webp"
+    },
+    {
+      "id": "citrus_grandis",
+      "arabicName": "أترج هندي",
+      "aliases": [
+        "بوملي"
+      ],
+      "scientificName": "Citrus grandis",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_grandis.webp"
+    },
+    {
+      "id": "glycine_max",
+      "arabicName": "فول الصويا",
+      "aliases": [
+        "صويا"
+      ],
+      "scientificName": "Glycine max",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/glycine_max.webp"
+    },
+    {
+      "id": "arachis_hypogaea",
+      "arabicName": "فول سوداني",
+      "aliases": [
+        "كاوكاو"
+      ],
+      "scientificName": "Arachis hypogaea",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/arachis_hypogaea.webp"
+    },
+    {
+      "id": "abelmoschus_esculentus",
+      "arabicName": "بامية",
+      "aliases": [
+        "باميا"
+      ],
+      "scientificName": "Abelmoschus esculentus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/abelmoschus_esculentus.webp"
+    },
+    {
+      "id": "brassica_rapa_chinensis",
+      "arabicName": "بوك تشوي",
+      "aliases": [
+        "باك تشوي",
+        "ملفوف صيني أخضر"
+      ],
+      "scientificName": "Brassica rapa subsp. chinensis",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_rapa_chinensis.webp"
+    },
+    {
+      "id": "brassica_oleracea_gongylodes",
+      "arabicName": "كولرابي",
+      "aliases": [
+        "لفت ألماني"
+      ],
+      "scientificName": "Brassica oleracea var. gongylodes",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_oleracea_gongylodes.webp"
+    },
+    {
+      "id": "brassica_oleracea_capitata",
+      "arabicName": "ملفوف أخضر",
+      "aliases": [
+        "كرنب أخضر"
+      ],
+      "scientificName": "Brassica oleracea var. capitata",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_oleracea_capitata.webp"
+    },
+    {
+      "id": "allium_ampeloprasum",
+      "arabicName": "ثوم الفصوص",
+      "aliases": [
+        "ثوم كبير"
+      ],
+      "scientificName": "Allium ampeloprasum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/allium_ampeloprasum.webp"
+    },
+    {
+      "id": "allium_cepa_shallot",
+      "arabicName": "بصل أخضر صغير",
+      "aliases": [
+        "شالوت"
+      ],
+      "scientificName": "Allium cepa",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/allium_cepa_shallot.webp"
+    },
+    {
+      "id": "solanum_pimpinellifolium",
+      "arabicName": "طماطم برية",
+      "aliases": [
+        "طماطم صغيرة برية"
+      ],
+      "scientificName": "Solanum pimpinellifolium",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/solanum_pimpinellifolium.webp"
+    },
+    {
+      "id": "physalis_peruviana",
+      "arabicName": "حرنكش",
+      "aliases": [
+        "فيساليس",
+        "حب الملوك"
+      ],
+      "scientificName": "Physalis peruviana",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/physalis_peruviana.webp"
+    },
+    {
+      "id": "amaranthus_tricolor",
+      "arabicName": "أمارانث",
+      "aliases": [
+        "سبانخ صينية"
+      ],
+      "scientificName": "Amaranthus tricolor",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/amaranthus_tricolor.webp"
+    },
+    {
+      "id": "portulaca_oleracea",
+      "arabicName": "رجلة",
+      "aliases": [
+        "فرفحينة"
+      ],
+      "scientificName": "Portulaca oleracea",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/portulaca_oleracea.webp"
+    },
+    {
+      "id": "tetragonia_tetragonioides",
+      "arabicName": "سبانخ نيوزيلندية",
+      "aliases": [
+        "سبانخ نيوزيلندي"
+      ],
+      "scientificName": "Tetragonia tetragonioides",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/tetragonia_tetragonioides.webp"
+    },
+    {
+      "id": "colocasia_esculenta",
+      "arabicName": "قلقاس",
+      "aliases": [
+        "أذن الفيل"
+      ],
+      "scientificName": "Colocasia esculenta",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/colocasia_esculenta.webp"
+    },
+    {
+      "id": "dioscorea_alata",
+      "arabicName": "يام بنفسجي",
+      "aliases": [
+        "يام"
+      ],
+      "scientificName": "Dioscorea alata",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/dioscorea_alata.webp"
+    },
+    {
+      "id": "manihot_esculenta",
+      "arabicName": "كسافا",
+      "aliases": [
+        "مانيوك"
+      ],
+      "scientificName": "Manihot esculenta",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/manihot_esculenta.webp"
+    },
+    {
+      "id": "helianthus_tuberosus",
+      "arabicName": "خرشوف القدس",
+      "aliases": [
+        "أرضي شوكي مقدسي"
+      ],
+      "scientificName": "Helianthus tuberosus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/helianthus_tuberosus.webp"
+    },
+    {
+      "id": "cynara_cardunculus",
+      "arabicName": "كردون",
+      "aliases": [
+        "خرشوف بري"
+      ],
+      "scientificName": "Cynara cardunculus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cynara_cardunculus.webp"
+    },
+    {
+      "id": "solanum_tuberosum_sweet",
+      "arabicName": "بطاطا بنفسجية",
+      "aliases": [
+        "بطاطا ملونة"
+      ],
+      "scientificName": "Solanum tuberosum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/solanum_tuberosum_sweet.webp"
+    },
+    {
+      "id": "cucumis_anguria",
+      "arabicName": "خيار هندي صغير",
+      "aliases": [
+        "خيار بري"
+      ],
+      "scientificName": "Cucumis anguria",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cucumis_anguria.webp"
+    },
+    {
+      "id": "luffa_aegyptiaca",
+      "arabicName": "لوف",
+      "aliases": [
+        "ليفة"
+      ],
+      "scientificName": "Luffa aegyptiaca",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/luffa_aegyptiaca.webp"
+    },
+    {
+      "id": "lablab_purpureus",
+      "arabicName": "لوبيا حمراء",
+      "aliases": [
+        "فاصوليا ياقوتية"
+      ],
+      "scientificName": "Lablab purpureus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/lablab_purpureus.webp"
+    },
+    {
+      "id": "sesamum_indicum",
+      "arabicName": "سمسم",
+      "aliases": [
+        "جلجلان"
+      ],
+      "scientificName": "Sesamum indicum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/sesamum_indicum.webp"
+    },
+    {
+      "id": "linum_usitatissimum",
+      "arabicName": "كتان",
+      "aliases": [
+        "بزر الكتان"
+      ],
+      "scientificName": "Linum usitatissimum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/linum_usitatissimum.webp"
+    },
+    {
+      "id": "cucumis_melo_flexuosus",
+      "arabicName": "فقوس",
+      "aliases": [
+        "قثاء"
+      ],
+      "scientificName": "Cucumis melo",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cucumis_melo_flexuosus.webp"
+    },
+    {
+      "id": "brassica_nigra",
+      "arabicName": "خردل أسود",
+      "aliases": [
+        "بذور الخردل الأسود"
+      ],
+      "scientificName": "Brassica nigra",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_nigra.webp"
+    },
+    {
+      "id": "nigella_sativa",
+      "arabicName": "حبة البركة",
+      "aliases": [
+        "الحبة السوداء",
+        "سانوج"
+      ],
+      "scientificName": "Nigella sativa",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/nigella_sativa.webp"
+    },
+    {
+      "id": "cuminum_cyminum",
+      "arabicName": "كمون",
+      "aliases": [
+        "سنوت"
+      ],
+      "scientificName": "Cuminum cyminum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cuminum_cyminum.webp"
+    },
+    {
+      "id": "zingiber_officinale",
+      "arabicName": "زنجبيل",
+      "aliases": [],
+      "scientificName": "Zingiber officinale",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/zingiber_officinale.webp"
+    },
+    {
+      "id": "curcuma_longa",
+      "arabicName": "كركم",
+      "aliases": [
+        "هرد"
+      ],
+      "scientificName": "Curcuma longa",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/curcuma_longa.webp"
+    },
+    {
+      "id": "cymbopogon_citratus",
+      "arabicName": "عشب الليمون",
+      "aliases": [
+        "ليمون جراس"
+      ],
+      "scientificName": "Cymbopogon citratus",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cymbopogon_citratus.webp"
+    },
+    {
+      "id": "mentha_x_piperita",
+      "arabicName": "نعناع فلفلي",
+      "aliases": [
+        "نعناع إنجليزي"
+      ],
+      "scientificName": "Mentha × piperita",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/mentha_x_piperita.webp"
+    },
+    {
+      "id": "salvia_hispanica",
+      "arabicName": "شيا",
+      "aliases": [
+        "بذور الشيا"
+      ],
+      "scientificName": "Salvia hispanica",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/salvia_hispanica.webp"
+    },
+    {
+      "id": "ocimum_gratissimum",
+      "arabicName": "ريحان إفريقي",
+      "aliases": [
+        "حبق إفريقي"
+      ],
+      "scientificName": "Ocimum gratissimum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/ocimum_gratissimum.webp"
+    },
+    {
+      "id": "nepeta_cataria",
+      "arabicName": "نعناع القطط",
+      "aliases": [
+        "كات نيب"
+      ],
+      "scientificName": "Nepeta cataria",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/nepeta_cataria.webp"
+    },
+    {
+      "id": "achillea_millefolium",
+      "arabicName": "أخيلية",
+      "aliases": [
+        "ألف ورقة"
+      ],
+      "scientificName": "Achillea millefolium",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/achillea_millefolium.webp"
+    },
+    {
+      "id": "symphytum_officinale",
+      "arabicName": "سنفيتون",
+      "aliases": [
+        "عظمية"
+      ],
+      "scientificName": "Symphytum officinale",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/symphytum_officinale.webp"
+    },
+    {
+      "id": "verbena_officinalis",
+      "arabicName": "رعي الحمام",
+      "aliases": [
+        "فيربينا"
+      ],
+      "scientificName": "Verbena officinalis",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/verbena_officinalis.webp"
+    },
+    {
+      "id": "pelargonium_graveolens_rose",
+      "arabicName": "عطرشة وردية",
+      "aliases": [
+        "جيرانيوم عطري"
+      ],
+      "scientificName": "Pelargonium graveolens",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/pelargonium_graveolens_rose.webp"
+    },
+    {
+      "id": "passiflora_edulis",
+      "arabicName": "باشن فروت",
+      "aliases": [
+        "فاكهة العاطفة"
+      ],
+      "scientificName": "Passiflora edulis",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/passiflora_edulis.webp"
+    },
+    {
+      "id": "stevia_rebaudiana_garden",
+      "arabicName": "ستيفيا مزروعة",
+      "aliases": [
+        "ستيفيا"
+      ],
+      "scientificName": "Stevia rebaudiana",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/stevia_rebaudiana_garden.webp"
+    },
+    {
+      "id": "dahlia_pinnata",
+      "arabicName": "داليا",
+      "aliases": [
+        "أضاليا"
+      ],
+      "scientificName": "Dahlia pinnata",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/dahlia_pinnata.webp"
+    },
+    {
+      "id": "petunia_x_hybrida",
+      "arabicName": "بتونيا",
+      "aliases": [
+        "بتونيا هجينة"
+      ],
+      "scientificName": "Petunia × hybrida",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/petunia_x_hybrida.webp"
+    },
+    {
+      "id": "impatiens_walleriana",
+      "arabicName": "نبات السلطان",
+      "aliases": [
+        "وانكا"
+      ],
+      "scientificName": "Impatiens walleriana",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/impatiens_walleriana.webp"
+    },
+    {
+      "id": "viola_x_wittrockiana",
+      "arabicName": "بانسيه",
+      "aliases": [
+        "بنفسج الثالوث"
+      ],
+      "scientificName": "Viola × wittrockiana",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/viola_x_wittrockiana.webp"
+    },
+    {
+      "id": "zinnia_elegans",
+      "arabicName": "زينيا",
+      "aliases": [
+        "زينية"
+      ],
+      "scientificName": "Zinnia elegans",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/zinnia_elegans.webp"
+    },
+    {
+      "id": "tagetes_erecta",
+      "arabicName": "قطيفة",
+      "aliases": [
+        "ماريغولد"
+      ],
+      "scientificName": "Tagetes erecta",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/tagetes_erecta.webp"
+    },
+    {
+      "id": "antirrhinum_majus",
+      "arabicName": "حنك السبع",
+      "aliases": [
+        "فم السمكة"
+      ],
+      "scientificName": "Antirrhinum majus",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/antirrhinum_majus.webp"
+    },
+    {
+      "id": "petroselinum_crispum_root",
+      "arabicName": "بقدونس جذري",
+      "aliases": [
+        "بقدونس جذر"
+      ],
+      "scientificName": "Petroselinum crispum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/petroselinum_crispum_root.webp"
+    },
+    {
+      "id": "moringa_oleifera",
+      "arabicName": "مورينغا",
+      "aliases": [
+        "مرنجا"
+      ],
+      "scientificName": "Moringa oleifera",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/moringa_oleifera.webp"
+    },
+    {
+      "id": "citrus_australasica",
+      "arabicName": "ليمون إصبعي",
+      "aliases": [
+        "لايم إصبعي"
+      ],
+      "scientificName": "Citrus australasica",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_australasica.webp"
+    },
+    {
+      "id": "solanum_aethiopicum",
+      "arabicName": "باذنجان إفريقي",
+      "aliases": [
+        "طماطم إفريقية"
+      ],
+      "scientificName": "Solanum aethiopicum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/solanum_aethiopicum.webp"
     }
   ]
 }
