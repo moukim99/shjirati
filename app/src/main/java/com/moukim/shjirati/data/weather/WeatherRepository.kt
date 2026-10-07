@@ -2,11 +2,16 @@ package com.moukim.shjirati.data.weather
 
 import com.moukim.shjirati.data.local.WeatherDailyEntity
 import com.moukim.shjirati.data.local.WeatherDao
+import com.moukim.shjirati.data.local.DatabaseProvider
+import android.content.Context
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 
 class WeatherRepository(private val weatherDao: WeatherDao, private val remote: OpenMeteoWeatherDataSource = OpenMeteoWeatherDataSource()) {
+    companion object {
+        fun from(context: Context): WeatherRepository = WeatherRepository(DatabaseProvider.get(context).weatherDao())
+    }
     fun observe(location: WeatherLocation): Flow<List<WeatherDaily>> =
         weatherDao.observeDaily(location.latitude, location.longitude).map { it.map(WeatherDailyEntity::toDomain) }
 
