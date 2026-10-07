@@ -33,9 +33,10 @@ class MainActivity : ComponentActivity() {
         initialPlantId.value = intent?.getStringExtra(WateringAlarmReceiver.EXTRA_PLANT_ID)
         val repository = PlantRepositoryImpl(DatabaseProvider.get(this).dao())
         val catalogRepository = PlantCatalogRepository(this)
+        val articleRepository = com.moukim.shjirati.data.catalog.PlantArticleRepository(this)
         setContent {
             ShjiratiTheme {
-                ShjiratiApp(repository, catalogRepository, initialPlantId)
+                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId)
             }
         }
     }
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
 private fun ShjiratiApp(
     repository: PlantRepositoryImpl,
     catalogRepository: PlantCatalogRepository,
+    articleRepository: com.moukim.shjirati.data.catalog.PlantArticleRepository,
     targetPlantIdFlow: MutableStateFlow<String?>
 ) {
     var addingPlant by remember { mutableStateOf(false) }
@@ -112,6 +114,7 @@ private fun ShjiratiApp(
         val plant = selectedPlant!!
         PlantDetailScreen(
             plant = plant,
+            article = articleRepository.getByPlantId(plant.id),
             history = repository.observeWateringHistory(plant.id),
             onBack = { selectedPlant = null },
             onWater = { vm.water(plant) },
