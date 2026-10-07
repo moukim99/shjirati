@@ -5,13 +5,15 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class PlantCatalogRepository(private val context: Context) {
-    fun getAll(): List<PlantCatalogEntry> {
+    private val cachedEntries: List<PlantCatalogEntry> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         val json = context.assets.open("plants/plant_catalog.json").bufferedReader().use { it.readText() }
         val plants = JSONObject(json).getJSONArray("plants")
-        return buildList(plants.length()) {
+        buildList(plants.length()) {
             for (index in 0 until plants.length()) add(plants.getJSONObject(index).toEntry())
         }
     }
+
+    fun getAll(): List<PlantCatalogEntry> = cachedEntries
 
     fun search(query: String): List<PlantCatalogEntry> {
         val q = query.trim()
