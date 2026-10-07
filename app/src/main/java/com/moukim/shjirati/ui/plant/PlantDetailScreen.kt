@@ -31,10 +31,13 @@ import com.moukim.shjirati.data.catalog.PlantArticle
 import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
 import com.moukim.shjirati.data.local.WateringLogEntity
+import com.moukim.shjirati.data.weather.PlantWeatherAdvice
+import com.moukim.shjirati.data.weather.PlantWeatherRisk
 import com.moukim.shjirati.domain.PlantAgeCalculator
 import com.moukim.shjirati.domain.WateringCalculator
 import com.moukim.shjirati.util.ImageUtils
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -45,6 +48,7 @@ fun PlantDetailScreen(
     plant: PlantEntity,
     article: PlantArticle? = null,
     history: Flow<List<WateringLogEntity>>,
+    weatherAdvice: Flow<List<PlantWeatherAdvice>>? = null,
     onBack: () -> Unit,
     onWater: () -> Unit,
     onEdit: () -> Unit,
@@ -52,6 +56,7 @@ fun PlantDetailScreen(
 ) {
     var confirmDelete by remember { mutableStateOf(false) }
     val logs by history.collectAsState(initial = emptyList())
+    val advice by weatherAdvice?.collectAsState(initial = emptyList()) ?: remember { mutableStateOf(emptyList()) }
     
     val imagePaths = remember(plant.imageUri) { plant.imageUrisList }
     var selectedImageIndex by remember { mutableIntStateOf(0) }
@@ -246,6 +251,9 @@ fun PlantDetailScreen(
                     }
                 }
             }
+            if (weatherAdvice != null) {
+                item { WeatherAdviceSection(advice) }
+            }
             article?.let { knowledge ->
                 item {
                     KnowledgeSection(title = "عن النبتة") {
@@ -414,5 +422,33 @@ private fun KnowledgeRow(label: String, value: String) {
             fontWeight = FontWeight.SemiBold
         )
         Text(value, style = MaterialTheme.typography.bodyLarge)
+    }
+}
+
+@Composable
+private fun WeatherAdviceSection(advice: List<PlantWeatherAdvice>) {
+    val warnings = advice.filter { it.risk != PlantWeatherRisk.NONE }.take(3)
+    val today = advice.firstOrNull()
+    Card(
+        Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = if (warnings.isEmpty()) MaterialTheme.colorScheme.primaryContainer
+            else MaterialTheme.colorScheme.errorContainer
+        )
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("الطقس الخاص بهذه النبتة", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            if (warnings.isEmpty()) {
+                Text(today?.message ?: "لا توجد بيانات طقس محفوظة حاليًا.", style = MaterialTheme.typography.bodyLarge)
+            } else {
+                warnings.forEach { item ->
+                    val date = LocalDate.ofEpochDay(item.dateEpochDay)
+                    Text("• \\${date.dayOfMonth}/\\${date.monthValue}: \\${item.message}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                }
+            }
+            if (advice.size > warnings.size && warnings.isNotEmpty()) {
+                Text("يعرض التطبيق أهم التنبيهات القادمة فقط.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
     }
 }
