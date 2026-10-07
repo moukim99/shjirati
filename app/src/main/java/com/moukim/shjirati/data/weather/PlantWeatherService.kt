@@ -24,10 +24,7 @@ class PlantWeatherService(
         }
     }
 
-    suspend fun refresh(
-        plantId: String,
-        location: WeatherLocation
-    ): WeatherResult {
+    suspend fun refresh(location: WeatherLocation): WeatherResult {
         return weatherRepository.refresh(location)
     }
 
