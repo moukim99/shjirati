@@ -39,6 +39,9 @@ import com.moukim.shjirati.domain.PlantAgeCalculator
 import com.moukim.shjirati.domain.WateringCalculator
 import com.moukim.shjirati.ui.theme.*
 import com.moukim.shjirati.util.ImageUtils
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Composable
 fun HomeScreen(
@@ -172,6 +175,10 @@ fun HomeScreen(
                         )
                     }
                 }
+            }
+
+            item(span = { GridItemSpan(2) }) {
+                DailySummaryCard(plants = plants, dueCount = due.size)
             }
 
             if (plants.isEmpty()) {
@@ -311,6 +318,34 @@ fun HomeScreen(
 }
 
 @Composable
+@Composable
+private fun DailySummaryCard(plants: List<PlantEntity>, dueCount: Int) {
+    val today = LocalDate.now()
+    val wateredToday = plants.count { plant ->
+        plant.lastWateredAtEpochMillis?.let {
+            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate() == today
+        } == true
+    }
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = AppCard)
+    ) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text("ملخص اليوم", fontSize = 19.sp, fontWeight = FontWeight.Bold, color = AppTextMain)
+            Text(
+                text = when {
+                    plants.isEmpty() -> "أضف أول نبتة للبدء."
+                    dueCount > 0 && wateredToday > 0 -> "بقي سقي " + dueCount + " نبتة، وتم سقي " + wateredToday + " اليوم."
+                    dueCount > 0 -> "لديك " + dueCount + " نبتة تحتاج إلى السقي اليوم."
+                    wateredToday > 0 -> "تم سقي " + wateredToday + " نبتة اليوم."
+                    else -> "لا توجد مهام سقي مسجلة لليوم حتى الآن."
+                },
+                fontSize = 14.sp, color = AppTextMuted, lineHeight = 21.sp
+            )
+        }
+    }
+}
 private fun PlantCard(
     plant: PlantEntity,
     dueToday: Boolean,
