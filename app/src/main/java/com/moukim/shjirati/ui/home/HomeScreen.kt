@@ -45,7 +45,8 @@ fun HomeScreen(
     plants: List<PlantEntity>,
     onAddPlant: () -> Unit,
     onWater: (PlantEntity) -> Unit,
-    onSelectPlant: (PlantEntity) -> Unit
+    onSelectPlant: (PlantEntity) -> Unit,
+    onGardenLocation: () -> Unit
 ) {
     val due = remember(plants) { plants.filter { WateringCalculator.isDueToday(it) } }
     val notDue = remember(plants, due) { plants.filter { it !in due } }
@@ -127,6 +128,12 @@ fun HomeScreen(
                                     modifier = Modifier.size(26.dp)
                                 )
                             }
+                        }
+                        OutlinedButton(
+                            onClick = onGardenLocation,
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Text("موقع الحديقة")
                         }
                         Text(
                             text = "شجيراتي",
@@ -510,7 +517,8 @@ fun HomeScreenEmptyPreview() {
             plants = emptyList(),
             onAddPlant = {},
             onWater = {},
-            onSelectPlant = {}
+            onSelectPlant = {},
+            onGardenLocation = {}
         )
     }
 }
