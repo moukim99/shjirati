@@ -5,7 +5,7 @@ The catalog is intentionally separate from the user's Room plants table.
 - plant_catalog.json: bundled plant knowledge.
 - Room plants: plants created by the user.
 
-The starter catalog contains 30 common plants. Arabic is the primary language.
+The starter catalog contains 50 common plants. Arabic is the primary language.
 
 GERMINATION is used for vegetables/herbs and HARVEST for fruiting trees in the starter model.
 
