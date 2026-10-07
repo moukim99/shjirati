@@ -13,7 +13,7 @@ class PlantCatalogRepositoryTest {
 
     @Test
     fun catalog_has_expected_starter_size() {
-        assertEquals(130, repository.getAll().size)
+        assertEquals(200, repository.getAll().size)
     }
 
     @Test
@@ -40,7 +40,6 @@ class PlantCatalogRepositoryTest {
             }
         }
     }
-
 
     @Test
     fun Arabic_search_finds_common_alias() {
