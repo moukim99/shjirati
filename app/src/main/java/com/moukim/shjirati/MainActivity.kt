@@ -89,13 +89,7 @@ private fun ShjiratiApp(
         ?: remember { mutableStateOf(emptyList()) }
 
     LaunchedEffect(showingWeather, gardenLocation, weatherRefreshKey) {
-        if (showingAssistant) {
-        PlantAssistantScreen(
-            catalogRepository = catalogRepository,
-            articleRepository = articleRepository,
-            onBack = { showingAssistant = false }
-        )
-    } else if (showingWeather && gardenLocation != null) {
+        if (showingWeather && gardenLocation != null) {
             weatherError = null
             when (val result = weatherRepository.refresh(gardenLocation!!)) {
                 is WeatherResult.Fresh -> weatherOffline = false
@@ -106,6 +100,7 @@ private fun ShjiratiApp(
             }
         }
     }
+
     LaunchedEffect(plants, targetPlantId) {
         val targetId = targetPlantId
         if (targetId != null && plants.isNotEmpty()) {
@@ -138,7 +133,13 @@ private fun ShjiratiApp(
         vm.scheduleAll(context)
     }
 
-    if (showingWeather && gardenLocation != null) {
+    if (showingAssistant) {
+        PlantAssistantScreen(
+            catalogRepository = catalogRepository,
+            articleRepository = articleRepository,
+            onBack = { showingAssistant = false }
+        )
+    } else if (showingWeather && gardenLocation != null) {
         WeatherScreen(
             location = gardenLocation!!,
             days = weatherDays,
