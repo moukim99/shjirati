@@ -17,6 +17,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moukim.shjirati.data.PlantRepositoryImpl
 import com.moukim.shjirati.data.catalog.PlantCatalogRepository
 import com.moukim.shjirati.data.local.DatabaseProvider
+import com.moukim.shjirati.data.weather.GardenLocationStore
+import com.moukim.shjirati.data.weather.WeatherLocation
+import com.moukim.shjirati.ui.weather.GardenLocationScreen
 import com.moukim.shjirati.notifications.WateringAlarmReceiver
 import com.moukim.shjirati.ui.home.HomeScreen
 import com.moukim.shjirati.ui.home.HomeViewModel
@@ -36,7 +39,7 @@ class MainActivity : ComponentActivity() {
         val articleRepository = com.moukim.shjirati.data.catalog.PlantArticleRepository(this)
         setContent {
             ShjiratiTheme {
-                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId)
+                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId, GardenLocationStore(this))
             }
         }
     }
@@ -55,11 +58,14 @@ private fun ShjiratiApp(
     repository: PlantRepositoryImpl,
     catalogRepository: PlantCatalogRepository,
     articleRepository: com.moukim.shjirati.data.catalog.PlantArticleRepository,
-    targetPlantIdFlow: MutableStateFlow<String?>
+    targetPlantIdFlow: MutableStateFlow<String?>,
+    gardenLocationStore: GardenLocationStore
 ) {
     var addingPlant by remember { mutableStateOf(false) }
     var editingPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
     var selectedPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
+    var editingGardenLocation by remember { mutableStateOf(false) }
+    var gardenLocation by remember { mutableStateOf(gardenLocationStore.getLocation()) }
     val vm: HomeViewModel = viewModel(factory = HomeViewModel.factory(repository))
     val context = LocalContext.current
     vm.attachContext(context)
@@ -99,7 +105,21 @@ private fun ShjiratiApp(
         vm.scheduleAll(context)
     }
 
-    if (editingPlant != null) {
+    if (editingGardenLocation) {
+        GardenLocationScreen(
+            initialLocation = gardenLocation,
+            onSave = {
+                gardenLocationStore.saveLocation(it)
+                gardenLocation = it
+                editingGardenLocation = false
+            },
+            onClear = {
+                gardenLocationStore.clear()
+                gardenLocation = null
+            },
+            onBack = { editingGardenLocation = false }
+        )
+    } else if (editingPlant != null) {
         val plant = editingPlant!!
         PlantFormScreen(
             initialPlant = plant,
@@ -135,7 +155,8 @@ private fun ShjiratiApp(
             plants = plants,
             onAddPlant = { addingPlant = true },
             onWater = vm::water,
-            onSelectPlant = { selectedPlant = it }
+            onSelectPlant = { selectedPlant = it },
+            onGardenLocation = { editingGardenLocation = true }
         )
     }
 }
