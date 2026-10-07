@@ -43,4 +43,5 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
 @androidx.room.TypeConverters(ShjiratiConverters::class)
 abstract class ShjiratiDatabase : RoomDatabase() {
     abstract fun dao(): ShjiratiDao
+    abstract fun weatherDao(): WeatherDao
 }
