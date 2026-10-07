@@ -1,38 +1,498 @@
 {
   "schemaVersion": 1,
-  "datasetVersion": "0.1.0",
+  "datasetVersion": "0.2.0",
   "language": "ar",
-  "description": "Shjirati offline starter plant catalog.",
+  "description": "Shjirati offline Arabic plant catalog; curated starter set for common Mediterranean and household plants.",
   "plants": [
-    {"id":"solanum_lycopersicum","arabicName":"طماطم","aliases":["بندورة"],"scientificName":"Solanum lycopersicum","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/solanum_lycopersicum.webp"},
-    {"id":"solanum_tuberosum","arabicName":"بطاطا","aliases":["بطاطس"],"scientificName":"Solanum tuberosum","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/solanum_tuberosum.webp"},
-    {"id":"daucus_carota","arabicName":"جزر","aliases":[],"scientificName":"Daucus carota","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/daucus_carota.webp"},
-    {"id":"allium_cepa","arabicName":"بصل","aliases":[],"scientificName":"Allium cepa","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/allium_cepa.webp"},
-    {"id":"allium_sativum","arabicName":"ثوم","aliases":[],"scientificName":"Allium sativum","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/allium_sativum.webp"},
-    {"id":"lactuca_sativa","arabicName":"خس","aliases":[],"scientificName":"Lactuca sativa","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/lactuca_sativa.webp"},
-    {"id":"spinacia_oleracea","arabicName":"سبانخ","aliases":[],"scientificName":"Spinacia oleracea","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/spinacia_oleracea.webp"},
-    {"id":"cucumis_sativus","arabicName":"خيار","aliases":[],"scientificName":"Cucumis sativus","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/cucumis_sativus.webp"},
-    {"id":"cucurbita_pepo","arabicName":"كوسة","aliases":["قرع أخضر"],"scientificName":"Cucurbita pepo","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/cucurbita_pepo.webp"},
-    {"id":"capsicum_annuum","arabicName":"فلفل","aliases":["فلفل حلو"],"scientificName":"Capsicum annuum","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/capsicum_annuum.webp"},
-    {"id":"solanum_melongena","arabicName":"باذنجان","aliases":[],"scientificName":"Solanum melongena","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/solanum_melongena.webp"},
-    {"id":"raphanus_sativus","arabicName":"فجل","aliases":[],"scientificName":"Raphanus sativus","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/raphanus_sativus.webp"},
-    {"id":"pisum_sativum","arabicName":"بازلاء","aliases":["جلبانة","بسلة"],"scientificName":"Pisum sativum","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/pisum_sativum.webp"},
-    {"id":"phaseolus_vulgaris","arabicName":"فاصوليا","aliases":[],"scientificName":"Phaseolus vulgaris","category":"VEGETABLE","dateMode":"GERMINATION","imageAsset":"plants/phaseolus_vulgaris.webp"},
-    {"id":"ocimum_basilicum","arabicName":"ريحان","aliases":["حبق"],"scientificName":"Ocimum basilicum","category":"HERB","dateMode":"GERMINATION","imageAsset":"plants/ocimum_basilicum.webp"},
-    {"id":"mentha_spicata","arabicName":"نعناع","aliases":[],"scientificName":"Mentha spicata","category":"HERB","dateMode":"GERMINATION","imageAsset":"plants/mentha_spicata.webp"},
-    {"id":"petroselinum_crispum","arabicName":"بقدونس","aliases":["معدنوس"],"scientificName":"Petroselinum crispum","category":"HERB","dateMode":"GERMINATION","imageAsset":"plants/petroselinum_crispum.webp"},
-    {"id":"coriandrum_sativum","arabicName":"كزبرة","aliases":["قزبر"],"scientificName":"Coriandrum sativum","category":"HERB","dateMode":"GERMINATION","imageAsset":"plants/coriandrum_sativum.webp"},
-    {"id":"olea_europaea","arabicName":"زيتون","aliases":[],"scientificName":"Olea europaea","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/olea_europaea.webp"},
-    {"id":"citrus_sinensis","arabicName":"برتقال","aliases":[],"scientificName":"Citrus sinensis","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/citrus_sinensis.webp"},
-    {"id":"citrus_limon","arabicName":"ليمون","aliases":[],"scientificName":"Citrus limon","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/citrus_limon.webp"},
-    {"id":"citrus_reticulata","arabicName":"يوسفي","aliases":["مندرين"],"scientificName":"Citrus reticulata","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/citrus_reticulata.webp"},
-    {"id":"malus_domestica","arabicName":"تفاح","aliases":[],"scientificName":"Malus domestica","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/malus_domestica.webp"},
-    {"id":"prunus_persica","arabicName":"خوخ","aliases":[],"scientificName":"Prunus persica","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/prunus_persica.webp"},
-    {"id":"prunus_armeniaca","arabicName":"مشمش","aliases":[],"scientificName":"Prunus armeniaca","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/prunus_armeniaca.webp"},
-    {"id":"punica_granatum","arabicName":"رمان","aliases":[],"scientificName":"Punica granatum","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/punica_granatum.webp"},
-    {"id":"ficus_carica","arabicName":"تين","aliases":[],"scientificName":"Ficus carica","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/ficus_carica.webp"},
-    {"id":"vitis_vinifera","arabicName":"عنب","aliases":[],"scientificName":"Vitis vinifera","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/vitis_vinifera.webp"},
-    {"id":"prunus_dulcis","arabicName":"لوز","aliases":[],"scientificName":"Prunus dulcis","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/prunus_dulcis.webp"},
-    {"id":"phoenix_dactylifera","arabicName":"نخيل التمر","aliases":["تمر"],"scientificName":"Phoenix dactylifera","category":"TREE","dateMode":"HARVEST","imageAsset":"plants/phoenix_dactylifera.webp"}
+    {
+      "id": "solanum_lycopersicum",
+      "arabicName": "طماطم",
+      "aliases": [
+        "بندورة"
+      ],
+      "scientificName": "Solanum lycopersicum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/solanum_lycopersicum.webp"
+    },
+    {
+      "id": "solanum_tuberosum",
+      "arabicName": "بطاطا",
+      "aliases": [
+        "بطاطس"
+      ],
+      "scientificName": "Solanum tuberosum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/solanum_tuberosum.webp"
+    },
+    {
+      "id": "daucus_carota",
+      "arabicName": "جزر",
+      "aliases": [],
+      "scientificName": "Daucus carota",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/daucus_carota.webp"
+    },
+    {
+      "id": "allium_cepa",
+      "arabicName": "بصل",
+      "aliases": [],
+      "scientificName": "Allium cepa",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/allium_cepa.webp"
+    },
+    {
+      "id": "allium_sativum",
+      "arabicName": "ثوم",
+      "aliases": [],
+      "scientificName": "Allium sativum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/allium_sativum.webp"
+    },
+    {
+      "id": "lactuca_sativa",
+      "arabicName": "خس",
+      "aliases": [],
+      "scientificName": "Lactuca sativa",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/lactuca_sativa.webp"
+    },
+    {
+      "id": "spinacia_oleracea",
+      "arabicName": "سبانخ",
+      "aliases": [],
+      "scientificName": "Spinacia oleracea",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/spinacia_oleracea.webp"
+    },
+    {
+      "id": "cucumis_sativus",
+      "arabicName": "خيار",
+      "aliases": [],
+      "scientificName": "Cucumis sativus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cucumis_sativus.webp"
+    },
+    {
+      "id": "cucurbita_pepo",
+      "arabicName": "كوسة",
+      "aliases": [
+        "قرع أخضر"
+      ],
+      "scientificName": "Cucurbita pepo",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cucurbita_pepo.webp"
+    },
+    {
+      "id": "capsicum_annuum",
+      "arabicName": "فلفل",
+      "aliases": [
+        "فلفل حلو"
+      ],
+      "scientificName": "Capsicum annuum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/capsicum_annuum.webp"
+    },
+    {
+      "id": "solanum_melongena",
+      "arabicName": "باذنجان",
+      "aliases": [],
+      "scientificName": "Solanum melongena",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/solanum_melongena.webp"
+    },
+    {
+      "id": "raphanus_sativus",
+      "arabicName": "فجل",
+      "aliases": [],
+      "scientificName": "Raphanus sativus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/raphanus_sativus.webp"
+    },
+    {
+      "id": "pisum_sativum",
+      "arabicName": "بازلاء",
+      "aliases": [
+        "جلبانة",
+        "بسلة"
+      ],
+      "scientificName": "Pisum sativum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/pisum_sativum.webp"
+    },
+    {
+      "id": "phaseolus_vulgaris",
+      "arabicName": "فاصوليا",
+      "aliases": [],
+      "scientificName": "Phaseolus vulgaris",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/phaseolus_vulgaris.webp"
+    },
+    {
+      "id": "ocimum_basilicum",
+      "arabicName": "ريحان",
+      "aliases": [
+        "حبق"
+      ],
+      "scientificName": "Ocimum basilicum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/ocimum_basilicum.webp"
+    },
+    {
+      "id": "mentha_spicata",
+      "arabicName": "نعناع",
+      "aliases": [],
+      "scientificName": "Mentha spicata",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/mentha_spicata.webp"
+    },
+    {
+      "id": "petroselinum_crispum",
+      "arabicName": "بقدونس",
+      "aliases": [
+        "معدنوس"
+      ],
+      "scientificName": "Petroselinum crispum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/petroselinum_crispum.webp"
+    },
+    {
+      "id": "coriandrum_sativum",
+      "arabicName": "كزبرة",
+      "aliases": [
+        "قزبر"
+      ],
+      "scientificName": "Coriandrum sativum",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/coriandrum_sativum.webp"
+    },
+    {
+      "id": "olea_europaea",
+      "arabicName": "زيتون",
+      "aliases": [],
+      "scientificName": "Olea europaea",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/olea_europaea.webp"
+    },
+    {
+      "id": "citrus_sinensis",
+      "arabicName": "برتقال",
+      "aliases": [],
+      "scientificName": "Citrus sinensis",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_sinensis.webp"
+    },
+    {
+      "id": "citrus_limon",
+      "arabicName": "ليمون",
+      "aliases": [],
+      "scientificName": "Citrus limon",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_limon.webp"
+    },
+    {
+      "id": "citrus_reticulata",
+      "arabicName": "يوسفي",
+      "aliases": [
+        "مندرين"
+      ],
+      "scientificName": "Citrus reticulata",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/citrus_reticulata.webp"
+    },
+    {
+      "id": "malus_domestica",
+      "arabicName": "تفاح",
+      "aliases": [],
+      "scientificName": "Malus domestica",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/malus_domestica.webp"
+    },
+    {
+      "id": "prunus_persica",
+      "arabicName": "خوخ",
+      "aliases": [],
+      "scientificName": "Prunus persica",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/prunus_persica.webp"
+    },
+    {
+      "id": "prunus_armeniaca",
+      "arabicName": "مشمش",
+      "aliases": [],
+      "scientificName": "Prunus armeniaca",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/prunus_armeniaca.webp"
+    },
+    {
+      "id": "punica_granatum",
+      "arabicName": "رمان",
+      "aliases": [],
+      "scientificName": "Punica granatum",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/punica_granatum.webp"
+    },
+    {
+      "id": "ficus_carica",
+      "arabicName": "تين",
+      "aliases": [],
+      "scientificName": "Ficus carica",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/ficus_carica.webp"
+    },
+    {
+      "id": "vitis_vinifera",
+      "arabicName": "عنب",
+      "aliases": [],
+      "scientificName": "Vitis vinifera",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/vitis_vinifera.webp"
+    },
+    {
+      "id": "prunus_dulcis",
+      "arabicName": "لوز",
+      "aliases": [],
+      "scientificName": "Prunus dulcis",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/prunus_dulcis.webp"
+    },
+    {
+      "id": "phoenix_dactylifera",
+      "arabicName": "نخيل التمر",
+      "aliases": [
+        "تمر"
+      ],
+      "scientificName": "Phoenix dactylifera",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/phoenix_dactylifera.webp"
+    },
+    {
+      "id": "zea_mays",
+      "arabicName": "ذرة",
+      "aliases": [],
+      "scientificName": "Zea mays",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/zea_mays.webp"
+    },
+    {
+      "id": "brassica_oleracea",
+      "arabicName": "ملفوف",
+      "aliases": [
+        "كرنب"
+      ],
+      "scientificName": "Brassica oleracea",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_oleracea.webp"
+    },
+    {
+      "id": "brassica_oleracea_botrytis",
+      "arabicName": "قرنبيط",
+      "aliases": [
+        "زهرة"
+      ],
+      "scientificName": "Brassica oleracea var. botrytis",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_oleracea_botrytis.webp"
+    },
+    {
+      "id": "brassica_oleracea_italica",
+      "arabicName": "بروكلي",
+      "aliases": [],
+      "scientificName": "Brassica oleracea var. italica",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_oleracea_italica.webp"
+    },
+    {
+      "id": "beta_vulgaris",
+      "arabicName": "شمندر",
+      "aliases": [
+        "بنجر"
+      ],
+      "scientificName": "Beta vulgaris",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/beta_vulgaris.webp"
+    },
+    {
+      "id": "brassica_rapa",
+      "arabicName": "لفت",
+      "aliases": [],
+      "scientificName": "Brassica rapa",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/brassica_rapa.webp"
+    },
+    {
+      "id": "solanum_lycopersicum_cherry",
+      "arabicName": "طماطم كرزية",
+      "aliases": [],
+      "scientificName": "Solanum lycopersicum",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/solanum_lycopersicum_cherry.webp"
+    },
+    {
+      "id": "cucumis_melo",
+      "arabicName": "شمام",
+      "aliases": [],
+      "scientificName": "Cucumis melo",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cucumis_melo.webp"
+    },
+    {
+      "id": "citrullus_lanatus",
+      "arabicName": "بطيخ",
+      "aliases": [
+        "دلاع"
+      ],
+      "scientificName": "Citrullus lanatus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/citrullus_lanatus.webp"
+    },
+    {
+      "id": "artemisia_dracunculus",
+      "arabicName": "طرخون",
+      "aliases": [],
+      "scientificName": "Artemisia dracunculus",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/artemisia_dracunculus.webp"
+    },
+    {
+      "id": "salvia_officinalis",
+      "arabicName": "مريمية",
+      "aliases": [
+        "قصعين"
+      ],
+      "scientificName": "Salvia officinalis",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/salvia_officinalis.webp"
+    },
+    {
+      "id": "thymus_vulgaris",
+      "arabicName": "زعتر",
+      "aliases": [],
+      "scientificName": "Thymus vulgaris",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/thymus_vulgaris.webp"
+    },
+    {
+      "id": "rosmarinus_officinalis",
+      "arabicName": "إكليل الجبل",
+      "aliases": [
+        "روزماري",
+        "حصى البان"
+      ],
+      "scientificName": "Salvia rosmarinus",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/rosmarinus_officinalis.webp"
+    },
+    {
+      "id": "laurus_nobilis",
+      "arabicName": "غار",
+      "aliases": [
+        "ورق الغار"
+      ],
+      "scientificName": "Laurus nobilis",
+      "category": "HERB",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/laurus_nobilis.webp"
+    },
+    {
+      "id": "pyrus_communis",
+      "arabicName": "كمثرى",
+      "aliases": [
+        "إجاص"
+      ],
+      "scientificName": "Pyrus communis",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/pyrus_communis.webp"
+    },
+    {
+      "id": "prunus_avium",
+      "arabicName": "كرز",
+      "aliases": [],
+      "scientificName": "Prunus avium",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/prunus_avium.webp"
+    },
+    {
+      "id": "prunus_domestica",
+      "arabicName": "برقوق",
+      "aliases": [
+        "خوخ أوروبي"
+      ],
+      "scientificName": "Prunus domestica",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/prunus_domestica.webp"
+    },
+    {
+      "id": "cydonia_oblonga",
+      "arabicName": "سفرجل",
+      "aliases": [],
+      "scientificName": "Cydonia oblonga",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/cydonia_oblonga.webp"
+    },
+    {
+      "id": "morus_alba",
+      "arabicName": "توت أبيض",
+      "aliases": [],
+      "scientificName": "Morus alba",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/morus_alba.webp"
+    },
+    {
+      "id": "carica_papaya",
+      "arabicName": "بابايا",
+      "aliases": [],
+      "scientificName": "Carica papaya",
+      "category": "TREE",
+      "dateMode": "HARVEST",
+      "imageAsset": "plants/carica_papaya.webp"
+    }
   ]
 }
