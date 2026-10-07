@@ -66,6 +66,7 @@ private fun ShjiratiApp(
     articleRepository: com.moukim.shjirati.data.catalog.PlantArticleRepository,
     targetPlantIdFlow: MutableStateFlow<String?>,
     gardenLocationStore: GardenLocationStore,
+    weatherRepository: WeatherRepository,
     plantWeatherService: PlantWeatherService
 ) {
     var addingPlant by remember { mutableStateOf(false) }
