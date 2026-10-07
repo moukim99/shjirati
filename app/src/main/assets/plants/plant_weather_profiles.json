@@ -1,0 +1,1208 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "0.8.0",
+  "language": "ar",
+  "description": "Machine-readable plant weather thresholds derived from the curated article tolerance fields. Conservative advisory thresholds, not agronomic guarantees.",
+  "profiles": [
+    {
+      "plantId": "solanum_lycopersicum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "solanum_tuberosum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "daucus_carota",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "allium_cepa",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "allium_sativum",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "lactuca_sativa",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "spinacia_oleracea",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucumis_sativus",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucurbita_pepo",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "capsicum_annuum",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "solanum_melongena",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "raphanus_sativus",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "pisum_sativum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "phaseolus_vulgaris",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "ocimum_basilicum",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "mentha_spicata",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "petroselinum_crispum",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "coriandrum_sativum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "olea_europaea",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_sinensis",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_limon",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_reticulata",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "malus_domestica",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "prunus_persica",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "prunus_armeniaca",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "punica_granatum",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "ficus_carica",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "vitis_vinifera",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "prunus_dulcis",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "phoenix_dactylifera",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "zea_mays",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_oleracea",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_oleracea_botrytis",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_oleracea_italica",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "beta_vulgaris",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_rapa",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "solanum_lycopersicum_cherry",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucumis_melo",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrullus_lanatus",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "artemisia_dracunculus",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "salvia_officinalis",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "thymus_vulgaris",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "rosmarinus_officinalis",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 40,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "laurus_nobilis",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "pyrus_communis",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "prunus_avium",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "prunus_domestica",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cydonia_oblonga",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "morus_alba",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "carica_papaya",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_oleracea_gem",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "allium_porrum",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "allium_fistulosum",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_juncea",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "eruca_vesicaria",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cichorium_endivia",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cichorium_intybus",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "apium_graveolens",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "foeniculum_vulgare",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucurbita_maxima",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucurbita_moschata",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "capsicum_annuum_chili",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "ipomoea_batatas",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_oleracea_kale",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "phaseolus_lunatus",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "vicia_faba",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "vigna_unguiculata",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cicer_arietinum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "lens_culinaris",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "fragaria_ananassa",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cynara_cardunculus_scolymus",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "asparagus_officinalis",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_rapa_pekinensis",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "daucus_carota_purple",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "raphanus_sativus_daikon",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "beta_vulgaris_chard",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucumis_melo_cantalupensis",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucumis_melo_honeydew",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "mangifera_indica",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "prunus_cerasus",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_paradisi",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_aurantium",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_maxima",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_medica",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "persea_americana",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "musa_acuminata",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "morus_nigra",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "diospyros_kaki",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "actinidia_deliciosa",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "psidium_guajava",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "lavandula_angustifolia",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "origanum_vulgare",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "origanum_majorana",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "aloysia_citrodora",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "melissa_officinalis",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "satureja_hortensis",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "pelargonium_graveolens",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "stevia_rebaudiana",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "camellia_sinensis",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "ocimum_tenuiflorum",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "aloe_vera",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "pistacia_vera",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "juglans_regia",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "corylus_avellana",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "castanea_sativa",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "avena_sativa",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "triticum_aestivum",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "hordeum_vulgare",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "sorghum_bicolor",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "vicia_sativa",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "vigna_radiata",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_napus",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_oleracea_cabbage_red",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "allium_schoenoprasum",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "anethum_graveolens",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "carum_carvi",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "pimpinella_anisum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "trigonella_foenum_graecum",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "papaver_somniferum",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "matricaria_chamomilla",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "calendula_officinalis",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "echinacea_purpurea",
+      "frostRiskMinC": -4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "alcea_rosea",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "jasminum_officinale",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "rosa_damascena",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "pelargonium_zonale",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "bougainvillea_spectabilis",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "hibiscus_rosa_sinensis",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "gardenia_jasminoides",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucumis_metuliferus",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_aurantiifolia",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_bergamia",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "acca_sellowiana",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "ceratonia_siliqua",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "arbutus_unedo",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "eriobotrya_japonica",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "ziziphus_jujuba",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "prunus_spinosa",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "annona_cherimola",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "tamarindus_indica",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_japonica",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "pinus_pinea",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "quercus_suber",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "syzygium_cumini",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "carissa_macrocarpa",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_clementina",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "musa_balbisiana",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_grandis",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "glycine_max",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "arachis_hypogaea",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "abelmoschus_esculentus",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_rapa_chinensis",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_oleracea_gongylodes",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_oleracea_capitata",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "allium_ampeloprasum",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "allium_cepa_shallot",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "solanum_pimpinellifolium",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "physalis_peruviana",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "amaranthus_tricolor",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "portulaca_oleracea",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "tetragonia_tetragonioides",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "colocasia_esculenta",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "dioscorea_alata",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "manihot_esculenta",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "helianthus_tuberosus",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cynara_cardunculus",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "solanum_tuberosum_sweet",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucumis_anguria",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "luffa_aegyptiaca",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "lablab_purpureus",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "sesamum_indicum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "linum_usitatissimum",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cucumis_melo_flexuosus",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "brassica_nigra",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "nigella_sativa",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cuminum_cyminum",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "zingiber_officinale",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "curcuma_longa",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "cymbopogon_citratus",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "mentha_x_piperita",
+      "frostRiskMinC": 0,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "salvia_hispanica",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "ocimum_gratissimum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "nepeta_cataria",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "achillea_millefolium",
+      "frostRiskMinC": -4,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "symphytum_officinale",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "verbena_officinalis",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "pelargonium_graveolens_rose",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "passiflora_edulis",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "stevia_rebaudiana_garden",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "dahlia_pinnata",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "petunia_x_hybrida",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "impatiens_walleriana",
+      "frostRiskMinC": 4,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "viola_x_wittrockiana",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "zinnia_elegans",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "tagetes_erecta",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "antirrhinum_majus",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 32,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "petroselinum_crispum_root",
+      "frostRiskMinC": -2,
+      "heatRiskMaxC": 35,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "moringa_oleifera",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 42,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "citrus_australasica",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    },
+    {
+      "plantId": "solanum_aethiopicum",
+      "frostRiskMinC": 2,
+      "heatRiskMaxC": 38,
+      "source": "derived_from_article_tolerance_v1"
+    }
+  ]
+}
