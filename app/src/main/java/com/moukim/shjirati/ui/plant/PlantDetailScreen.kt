@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.moukim.shjirati.data.catalog.PlantArticle
 import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
 import com.moukim.shjirati.data.local.WateringLogEntity
@@ -42,6 +43,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun PlantDetailScreen(
     plant: PlantEntity,
+    article: PlantArticle? = null,
     history: Flow<List<WateringLogEntity>>,
     onBack: () -> Unit,
     onWater: () -> Unit,
@@ -244,6 +246,44 @@ fun PlantDetailScreen(
                     }
                 }
             }
+            article?.let { knowledge ->
+                item {
+                    KnowledgeSection(title = "عن النبتة") {
+                        KnowledgeRow("الوصف", knowledge.description)
+                        KnowledgeRow("الموطن الأصلي", knowledge.origin)
+                        KnowledgeRow("النوع", knowledge.plantType)
+                        KnowledgeRow("طريقة الإكثار", knowledge.propagation)
+                    }
+                }
+                item {
+                    KnowledgeSection(title = "التربة والظروف المناسبة") {
+                        KnowledgeRow("التربة", knowledge.soil)
+                        KnowledgeRow("درجة الحموضة", knowledge.soilPh)
+                        KnowledgeRow("الإضاءة", knowledge.sunlight)
+                        KnowledgeRow("الري", knowledge.watering)
+                        KnowledgeRow("الحرارة", knowledge.temperature)
+                        KnowledgeRow("تحمل الصقيع", knowledge.frostTolerance)
+                        KnowledgeRow("تحمل الحرارة", knowledge.heatTolerance)
+                    }
+                }
+                item {
+                    KnowledgeSection(title = "الزراعة والنمو") {
+                        KnowledgeRow("الموسم", knowledge.plantingSeason)
+                        KnowledgeRow("طريقة الزراعة", knowledge.plantingMethod)
+                        KnowledgeRow("عمق البذور", knowledge.seedDepth)
+                        KnowledgeRow("المسافة", knowledge.spacing)
+                        KnowledgeRow("الإنبات", knowledge.germination)
+                        KnowledgeRow("النمو والحصاد", knowledge.growthHarvest)
+                        KnowledgeRow("التسميد", knowledge.fertilization)
+                    }
+                }
+                item {
+                    KnowledgeSection(title = "المشكلات والملاحظات") {
+                        KnowledgeRow("الآفات والأمراض", knowledge.pestsDiseases)
+                        KnowledgeRow("ملاحظات", knowledge.notes)
+                    }
+                }
+            }
             item {
                 Button(onClick = onWater, Modifier.fillMaxWidth().height(64.dp)) {
                     Icon(Icons.Default.WaterDrop, null)
@@ -339,4 +379,40 @@ private fun java.time.DayOfWeek.arabicLabel() = when (this) {
     java.time.DayOfWeek.FRIDAY -> "الجمعة"
     java.time.DayOfWeek.SATURDAY -> "السبت"
     java.time.DayOfWeek.SUNDAY -> "الأحد"
+}
+
+
+@Composable
+private fun KnowledgeSection(
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Card(Modifier.fillMaxWidth()) {
+        Column(
+            Modifier.padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            HorizontalDivider()
+            content()
+        }
+    }
+}
+
+@Composable
+private fun KnowledgeRow(label: String, value: String) {
+    if (value.isBlank()) return
+    Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.SemiBold
+        )
+        Text(value, style = MaterialTheme.typography.bodyLarge)
+    }
 }
