@@ -32,4 +32,13 @@ class PlantCatalogRepositoryTest {
         val results = repository.search("بندورة")
         assertEquals("solanum_lycopersicum", results.single().id)
     }
+
+    @Test
+    fun image_asset_paths_are_local_and_well_formed() {
+        repository.getAll().forEach { plant ->
+            assertFalse(plant.imageAsset.startsWith("/"))
+            assertFalse(plant.imageAsset.contains(".."))
+            assertFalse(plant.imageAsset.isBlank())
+        }
+    }
 }
