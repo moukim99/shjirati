@@ -19,6 +19,8 @@ import com.moukim.shjirati.data.catalog.PlantCatalogRepository
 import com.moukim.shjirati.data.local.DatabaseProvider
 import com.moukim.shjirati.data.weather.GardenLocationStore
 import com.moukim.shjirati.data.weather.WeatherLocation
+import com.moukim.shjirati.data.weather.PlantWeatherService
+import com.moukim.shjirati.data.weather.WeatherRepository
 import com.moukim.shjirati.ui.weather.GardenLocationScreen
 import com.moukim.shjirati.notifications.WateringAlarmReceiver
 import com.moukim.shjirati.ui.home.HomeScreen
@@ -39,7 +41,7 @@ class MainActivity : ComponentActivity() {
         val articleRepository = com.moukim.shjirati.data.catalog.PlantArticleRepository(this)
         setContent {
             ShjiratiTheme {
-                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId, GardenLocationStore(this))
+                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId, GardenLocationStore(this), PlantWeatherService(WeatherRepository.from(this), this))
             }
         }
     }
@@ -59,7 +61,8 @@ private fun ShjiratiApp(
     catalogRepository: PlantCatalogRepository,
     articleRepository: com.moukim.shjirati.data.catalog.PlantArticleRepository,
     targetPlantIdFlow: MutableStateFlow<String?>,
-    gardenLocationStore: GardenLocationStore
+    gardenLocationStore: GardenLocationStore,
+    plantWeatherService: PlantWeatherService
 ) {
     var addingPlant by remember { mutableStateOf(false) }
     var editingPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
@@ -135,6 +138,7 @@ private fun ShjiratiApp(
         PlantDetailScreen(
             plant = plant,
             article = articleRepository.getByPlantId(plant.id),
+            weatherAdvice = if (gardenLocation != null) plantWeatherService.observeAdvice(plant.id) else null,
             history = repository.observeWateringHistory(plant.id),
             onBack = { selectedPlant = null },
             onWater = { vm.water(plant) },
