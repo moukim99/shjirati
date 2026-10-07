@@ -136,9 +136,10 @@ fun PlantFormScreen(
                     category = when (catalogMatch.category) {
                         com.moukim.shjirati.data.catalog.CatalogPlantCategory.TREE ->
                             PlantCategory.TREE
-                        com.moukim.shjirati.data.catalog.CatalogPlantCategory.VEGETABLE,
-                        com.moukim.shjirati.data.catalog.CatalogPlantCategory.HERB ->
+                        com.moukim.shjirati.data.catalog.CatalogPlantCategory.VEGETABLE ->
                             PlantCategory.VEGETABLE
+                        com.moukim.shjirati.data.catalog.CatalogPlantCategory.HERB ->
+                            PlantCategory.HERB
                     }
                 }
                 if (!userTouchedFruitBearing && category == PlantCategory.TREE) {
@@ -757,7 +758,7 @@ fun PlantFormScreen(
             }
 
             // Expected Date Picker ("التاريخ المتوقع")
-            val showExpectedDateField = (category == PlantCategory.VEGETABLE) || (category == PlantCategory.TREE && isFruitBearing)
+            val showExpectedDateField = category != PlantCategory.TREE || isFruitBearing
             if (showExpectedDateField) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     val expectedLabel = if (category == PlantCategory.TREE) "تاريخ الحصاد المتوقع" else "تاريخ الإنبات المتوقع"
@@ -1385,6 +1386,7 @@ fun PlantFormScreen(
 private fun PlantCategory.arabicLabel() = when (this) {
     PlantCategory.TREE -> "🌳 شجرة"
     PlantCategory.VEGETABLE -> "🥕 خضروات"
+    PlantCategory.HERB -> "🌿 أعشاب"
 }
 
 private fun DayOfWeek.arabicLabel() = when (this) {
