@@ -14,7 +14,7 @@ class ShjiratiConverters {
     fun stringToCategory(value: String): PlantCategory = try {
         PlantCategory.valueOf(value)
     } catch (e: Exception) {
-        if (value == "VEGETABLE") PlantCategory.VEGETABLE else PlantCategory.TREE
+        when (value) {\n            "VEGETABLE" -> PlantCategory.VEGETABLE\n            "HERB" -> PlantCategory.HERB\n            else -> PlantCategory.TREE\n        }
     }
 }
 
