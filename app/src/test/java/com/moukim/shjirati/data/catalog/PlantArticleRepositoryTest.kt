@@ -21,6 +21,7 @@ class PlantArticleRepositoryTest {
 
         assertEquals(200, validation.catalogCount)
         assertTrue(validation.unknownArticleIds.isEmpty())
+        assertTrue(validation.isValid)
         assertEquals(200, validation.articleCount)
         assertEquals(0, validation.missingArticleIds.size)
     }
