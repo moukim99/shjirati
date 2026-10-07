@@ -39,8 +39,8 @@ class OpenMeteoWeatherDataSource {
                 val minC = min?.optDoubleOrNull(i); val maxC = max?.optDoubleOrNull(i)
                 add(WeatherDaily(LocalDate.parse(dates.getString(i)).toEpochDay(), minC, maxC,
                     rain?.optDoubleOrNull(i), probability?.optIntOrNull(i), humidity?.optDoubleOrNull(i),
-                    wind?.optDoubleOrNull(i), (minC ?: Double.POSITIVE_INFINITY) <= 2.0,
-                    (maxC ?: Double.NEGATIVE_INFINITY) >= 38.0, downloadedAt))
+                    wind?.optDoubleOrNull(i), WeatherRiskCalculator.frostRisk(minC),
+                    WeatherRiskCalculator.heatRisk(maxC), downloadedAt))
             }
         }
     }
