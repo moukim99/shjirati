@@ -13,7 +13,7 @@ class PlantCatalogRepositoryTest {
 
     @Test
     fun catalog_has_expected_starter_size() {
-        assertEquals(50, repository.getAll().size)
+        assertEquals(100, repository.getAll().size)
     }
 
     @Test
