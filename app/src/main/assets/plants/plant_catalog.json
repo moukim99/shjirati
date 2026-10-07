@@ -1024,15 +1024,15 @@
       "imageAsset": "plants/ocimum_tenuiflorum.webp"
     },
     {
-      "id": "aloe_officinalis",
+      "id": "aloe_vera",
       "arabicName": "صَبِر",
       "aliases": [
         "ألوفيرا"
       ],
-      "scientificName": "Aloe officinalis",
+      "scientificName": "Aloe vera",
       "category": "HERB",
       "dateMode": "GERMINATION",
-      "imageAsset": "plants/aloe_officinalis.webp"
+      "imageAsset": "plants/aloe_vera.webp"
     },
     {
       "id": "pistacia_vera",
@@ -1331,6 +1331,18 @@
       "category": "HERB",
       "dateMode": "GERMINATION",
       "imageAsset": "plants/gardenia_jasminoides.webp"
+    },
+    {
+      "id": "cucumis_metuliferus",
+      "arabicName": "كيانو",
+      "aliases": [
+        "شمام إفريقي",
+        "الخيار الشوكي"
+      ],
+      "scientificName": "Cucumis metuliferus",
+      "category": "VEGETABLE",
+      "dateMode": "GERMINATION",
+      "imageAsset": "plants/cucumis_metuliferus.webp"
     }
   ]
 }
