@@ -19,6 +19,8 @@ import com.moukim.shjirati.data.catalog.PlantCatalogRepository
 import com.moukim.shjirati.data.local.DatabaseProvider
 import com.moukim.shjirati.data.weather.GardenLocationStore
 import com.moukim.shjirati.data.weather.WeatherLocation
+import com.moukim.shjirati.data.weather.WeatherResult
+import com.moukim.shjirati.ui.weather.WeatherScreen
 import com.moukim.shjirati.data.weather.PlantWeatherService
 import com.moukim.shjirati.data.weather.WeatherRepository
 import com.moukim.shjirati.ui.weather.GardenLocationScreen
@@ -41,7 +43,7 @@ class MainActivity : ComponentActivity() {
         val articleRepository = com.moukim.shjirati.data.catalog.PlantArticleRepository(this)
         setContent {
             ShjiratiTheme {
-                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId, GardenLocationStore(this), PlantWeatherService(WeatherRepository.from(this), this))
+                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId, GardenLocationStore(this), WeatherRepository.from(this), PlantWeatherService(WeatherRepository.from(this), this))
             }
         }
     }
@@ -68,6 +70,9 @@ private fun ShjiratiApp(
     var editingPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
     var selectedPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
     var editingGardenLocation by remember { mutableStateOf(false) }
+    var showingWeather by remember { mutableStateOf(false) }
+    var weatherOffline by remember { mutableStateOf(false) }
+    var weatherError by remember { mutableStateOf<String?>(null) }
     var gardenLocation by remember { mutableStateOf(gardenLocationStore.getLocation()) }
     val vm: HomeViewModel = viewModel(factory = HomeViewModel.factory(repository))
     val context = LocalContext.current
@@ -75,6 +80,21 @@ private fun ShjiratiApp(
 
     val plants by vm.plants.collectAsState()
     val targetPlantId by targetPlantIdFlow.collectAsState()
+    val weatherDays by gardenLocation?.let { weatherRepository.observe(it).collectAsState(initial = emptyList()) }
+        ?: remember { mutableStateOf(emptyList()) }
+
+    LaunchedEffect(showingWeather, gardenLocation) {
+        if (showingWeather && gardenLocation != null) {
+            weatherError = null
+            when (val result = weatherRepository.refresh(gardenLocation!!)) {
+                is WeatherResult.Fresh -> weatherOffline = false
+                is WeatherResult.Failure -> {
+                    weatherOffline = true
+                    weatherError = result.message
+                }
+            }
+        }
+    }
 
     LaunchedEffect(plants, targetPlantId) {
         val targetId = targetPlantId
@@ -108,7 +128,22 @@ private fun ShjiratiApp(
         vm.scheduleAll(context)
     }
 
-    if (editingGardenLocation) {
+    if (showingWeather && gardenLocation != null) {
+        WeatherScreen(
+            location = gardenLocation!!,
+            days = weatherDays,
+            isRefreshing = false,
+            isOffline = weatherOffline,
+            errorMessage = weatherError,
+            onRefresh = {
+                weatherError = null
+                // Refresh is triggered by toggling the screen state below.
+                showingWeather = false
+                showingWeather = true
+            },
+            onBack = { showingWeather = false }
+        )
+    } else if (editingGardenLocation) {
         GardenLocationScreen(
             initialLocation = gardenLocation,
             onSave = {
@@ -160,7 +195,8 @@ private fun ShjiratiApp(
             onAddPlant = { addingPlant = true },
             onWater = vm::water,
             onSelectPlant = { selectedPlant = it },
-            onGardenLocation = { editingGardenLocation = true }
+            onGardenLocation = { editingGardenLocation = true },
+            onWeather = { if (gardenLocation != null) showingWeather = true else editingGardenLocation = true }
         )
     }
 }
