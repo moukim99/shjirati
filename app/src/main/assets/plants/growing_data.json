@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "description": "Verified starter growing data. Values are ranges and can vary by cultivar, temperature, growing method, and local conditions.",
+  "plants": [
+    {
+      "plantId": "solanum_lycopersicum",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 12,
+      "maturityDaysMin": 60,
+      "maturityDaysMax": 90,
+      "source": "USU Extension; UMN Extension"
+    },
+    {
+      "plantId": "cucumis_sativus",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 10,
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 60,
+      "source": "USU Extension; UMN Extension"
+    },
+    {
+      "plantId": "solanum_melongena",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 10,
+      "source": "USU Extension"
+    },
+    {
+      "plantId": "lactuca_sativa",
+      "germinationDaysMin": 6,
+      "germinationDaysMax": 8,
+      "maturityDaysMin": 40,
+      "maturityDaysMax": 60,
+      "source": "USU Extension; UMN Extension"
+    },
+    {
+      "plantId": "capsicum_annuum",
+      "germinationDaysMin": 9,
+      "germinationDaysMax": 14,
+      "source": "USU Extension"
+    },
+    {
+      "plantId": "raphanus_sativus",
+      "germinationDaysMin": 2,
+      "germinationDaysMax": 3,
+      "maturityDaysMin": 30,
+      "maturityDaysMax": 60,
+      "source": "USU Extension; UMN Extension"
+    },
+    {
+      "plantId": "spinacia_oleracea",
+      "maturityDaysMin": 35,
+      "maturityDaysMax": 45,
+      "source": "UMN Extension"
+    },
+    {
+      "plantId": "pisum_sativum",
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 80,
+      "source": "UMN Extension"
+    },
+    {
+      "plantId": "phaseolus_vulgaris",
+      "maturityDaysMin": 45,
+      "maturityDaysMax": 65,
+      "source": "UMN Extension"
+    },
+    {
+      "plantId": "brassica_oleracea",
+      "germinationDaysMin": 4,
+      "germinationDaysMax": 10,
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 90,
+      "source": "USU Extension; UMN Extension"
+    },
+    {
+      "plantId": "brassica_oleracea_botrytis",
+      "maturityDaysMin": 60,
+      "maturityDaysMax": 80,
+      "source": "UMN Extension"
+    },
+    {
+      "plantId": "brassica_oleracea_italica",
+      "germinationDaysMin": 7,
+      "germinationDaysMax": 10,
+      "maturityDaysMin": 50,
+      "maturityDaysMax": 70,
+      "source": "USU Extension; UMN Extension"
+    }
+  ]
+}
