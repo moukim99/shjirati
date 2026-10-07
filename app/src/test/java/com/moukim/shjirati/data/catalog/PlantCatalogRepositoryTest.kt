@@ -1,9 +1,9 @@
 package com.moukim.shjirati.data.catalog
 
 import androidx.test.core.app.ApplicationProvider
-import com.moukim.shjirati.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class PlantCatalogRepositoryTest {
