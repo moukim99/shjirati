@@ -47,7 +47,8 @@ fun HomeScreen(
     onWater: (PlantEntity) -> Unit,
     onSelectPlant: (PlantEntity) -> Unit,
     onGardenLocation: () -> Unit,
-    onWeather: () -> Unit
+    onWeather: () -> Unit,
+    onAssistant: () -> Unit
 ) {
     val due = remember(plants) { plants.filter { WateringCalculator.isDueToday(it) } }
     val notDue = remember(plants, due) { plants.filter { it !in due } }
@@ -141,6 +142,12 @@ fun HomeScreen(
                             shape = RoundedCornerShape(14.dp)
                         ) {
                             Text("الطقس")
+                        }
+        OutlinedButton(
+                            onClick = onAssistant,
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Text("المساعد")
                         }
                         Text(
                             text = "شجيراتي",
