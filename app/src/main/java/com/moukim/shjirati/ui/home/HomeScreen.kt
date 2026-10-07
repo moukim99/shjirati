@@ -556,6 +556,7 @@ private fun PlantCard(
 private fun PlantCategory.arabicLabel() = when (this) {
     PlantCategory.TREE -> "🌳 شجرة"
     PlantCategory.VEGETABLE -> "🥕 خضروات"
+    PlantCategory.HERB -> "🌿 أعشاب"
 }
 
 @Preview(showBackground = true)
