@@ -3,6 +3,7 @@ package com.moukim.shjirati.data.catalog
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -38,6 +39,27 @@ class PlantCatalogRepositoryTest {
                 CatalogPlantCategory.VEGETABLE,
                 CatalogPlantCategory.HERB -> assertEquals(CatalogDateMode.GERMINATION, plant.dateMode)
             }
+        }
+    }
+
+    @Test
+    fun verified_growing_data_is_available_for_core_starter_plants() {
+        val ids = setOf(
+            "solanum_lycopersicum",
+            "cucumis_sativus",
+            "solanum_melongena",
+            "lactuca_sativa",
+            "capsicum_annuum",
+            "raphanus_sativus",
+            "spinacia_oleracea",
+            "pisum_sativum",
+            "phaseolus_vulgaris",
+            "brassica_oleracea",
+            "brassica_oleracea_botrytis",
+            "brassica_oleracea_italica"
+        )
+        ids.forEach { id ->
+            assertNotNull(repository.getAll().single { it.id == id }.growingData)
         }
     }
 
