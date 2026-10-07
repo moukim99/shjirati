@@ -42,9 +42,10 @@ class MainActivity : ComponentActivity() {
         val repository = PlantRepositoryImpl(DatabaseProvider.get(this).dao())
         val catalogRepository = PlantCatalogRepository(this)
         val articleRepository = com.moukim.shjirati.data.catalog.PlantArticleRepository(this)
+        val weatherRepository = WeatherRepository.from(this)
         setContent {
             ShjiratiTheme {
-                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId, GardenLocationStore(this), WeatherRepository.from(this), PlantWeatherService(WeatherRepository.from(this), this))
+                ShjiratiApp(repository, catalogRepository, articleRepository, initialPlantId, GardenLocationStore(this), weatherRepository, PlantWeatherService(weatherRepository, this))
             }
         }
     }
@@ -74,6 +75,7 @@ private fun ShjiratiApp(
     var showingWeather by remember { mutableStateOf(false) }
     var showingAssistant by remember { mutableStateOf(false) }
     var weatherOffline by remember { mutableStateOf(false) }
+    var weatherRefreshKey by remember { mutableIntStateOf(0) }
     var weatherError by remember { mutableStateOf<String?>(null) }
     var gardenLocation by remember { mutableStateOf(gardenLocationStore.getLocation()) }
     val vm: HomeViewModel = viewModel(factory = HomeViewModel.factory(repository))
@@ -85,7 +87,7 @@ private fun ShjiratiApp(
     val weatherDays by gardenLocation?.let { weatherRepository.observe(it).collectAsState(initial = emptyList()) }
         ?: remember { mutableStateOf(emptyList()) }
 
-    LaunchedEffect(showingWeather, gardenLocation) {
+    LaunchedEffect(showingWeather, gardenLocation, weatherRefreshKey) {
         if (showingAssistant) {
         PlantAssistantScreen(
             catalogRepository = catalogRepository,
@@ -146,8 +148,7 @@ private fun ShjiratiApp(
             onRefresh = {
                 weatherError = null
                 // Refresh is triggered by toggling the screen state below.
-                showingWeather = false
-                showingWeather = true
+                weatherRefreshKey++
             },
             onBack = { showingWeather = false }
         )
