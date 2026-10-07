@@ -106,7 +106,6 @@ private fun ShjiratiApp(
             }
         }
     }
-
     LaunchedEffect(plants, targetPlantId) {
         val targetId = targetPlantId
         if (targetId != null && plants.isNotEmpty()) {
