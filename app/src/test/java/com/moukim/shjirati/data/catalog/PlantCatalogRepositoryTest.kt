@@ -28,6 +28,21 @@ class PlantCatalogRepositoryTest {
     }
 
     @Test
+    fun catalog_entries_have_valid_categories_and_date_modes() {
+        repository.getAll().forEach { plant ->
+            assertTrue(plant.arabicName.isNotBlank())
+            assertTrue(plant.scientificName.isNotBlank())
+            assertTrue(plant.imageAsset.startsWith("plants/"))
+            when (plant.category) {
+                CatalogPlantCategory.TREE -> assertEquals(CatalogDateMode.HARVEST, plant.dateMode)
+                CatalogPlantCategory.VEGETABLE,
+                CatalogPlantCategory.HERB -> assertEquals(CatalogDateMode.GERMINATION, plant.dateMode)
+            }
+        }
+    }
+
+
+    @Test
     fun Arabic_search_finds_common_alias() {
         val results = repository.search("بندورة")
         assertEquals("solanum_lycopersicum", results.single().id)
