@@ -21,6 +21,7 @@ import com.moukim.shjirati.data.weather.GardenLocationStore
 import com.moukim.shjirati.data.weather.WeatherLocation
 import com.moukim.shjirati.data.weather.WeatherResult
 import com.moukim.shjirati.ui.weather.WeatherScreen
+import com.moukim.shjirati.ui.assistant.PlantAssistantScreen
 import com.moukim.shjirati.data.weather.PlantWeatherService
 import com.moukim.shjirati.data.weather.WeatherRepository
 import com.moukim.shjirati.ui.weather.GardenLocationScreen
@@ -71,6 +72,7 @@ private fun ShjiratiApp(
     var selectedPlant by remember { mutableStateOf<com.moukim.shjirati.data.local.PlantEntity?>(null) }
     var editingGardenLocation by remember { mutableStateOf(false) }
     var showingWeather by remember { mutableStateOf(false) }
+    var showingAssistant by remember { mutableStateOf(false) }
     var weatherOffline by remember { mutableStateOf(false) }
     var weatherError by remember { mutableStateOf<String?>(null) }
     var gardenLocation by remember { mutableStateOf(gardenLocationStore.getLocation()) }
@@ -84,7 +86,13 @@ private fun ShjiratiApp(
         ?: remember { mutableStateOf(emptyList()) }
 
     LaunchedEffect(showingWeather, gardenLocation) {
-        if (showingWeather && gardenLocation != null) {
+        if (showingAssistant) {
+        PlantAssistantScreen(
+            catalogRepository = catalogRepository,
+            articleRepository = articleRepository,
+            onBack = { showingAssistant = false }
+        )
+    } else if (showingWeather && gardenLocation != null) {
             weatherError = null
             when (val result = weatherRepository.refresh(gardenLocation!!)) {
                 is WeatherResult.Fresh -> weatherOffline = false
@@ -196,7 +204,8 @@ private fun ShjiratiApp(
             onWater = vm::water,
             onSelectPlant = { selectedPlant = it },
             onGardenLocation = { editingGardenLocation = true },
-            onWeather = { if (gardenLocation != null) showingWeather = true else editingGardenLocation = true }
+            onWeather = { if (gardenLocation != null) showingWeather = true else editingGardenLocation = true },
+            onAssistant = { showingAssistant = true }
         )
     }
 }
