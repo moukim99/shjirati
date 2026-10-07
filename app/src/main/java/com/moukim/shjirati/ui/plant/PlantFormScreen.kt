@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.moukim.shjirati.data.catalog.PlantCatalogRepository
 import com.moukim.shjirati.data.local.PlantCategory
 import com.moukim.shjirati.data.local.PlantEntity
 import com.moukim.shjirati.domain.PlantAgeCalculator
@@ -60,6 +61,7 @@ import java.time.ZoneId
 @Composable
 fun PlantFormScreen(
     initialPlant: PlantEntity? = null,
+    catalogRepository: PlantCatalogRepository? = null,
     onSave: (
         name: String,
         category: PlantCategory,
@@ -121,12 +123,32 @@ fun PlantFormScreen(
 
     var recognizedPlantInfo by remember { mutableStateOf<RecognizedPlantInfo?>(null) }
 
-    // Plant Recognition Engine logic as user types
-    LaunchedEffect(name) {
+    // Offline recognition: the curated catalog is authoritative when available;
+    // the legacy dictionary remains as a fast fallback for common names.
+    LaunchedEffect(name, catalogRepository) {
         if (name.isNotBlank()) {
+            val catalogMatch = catalogRepository?.search(name)?.firstOrNull()
             val recognized = PlantRecognitionEngine.recognize(name)
             recognizedPlantInfo = recognized
-            if (recognized != null) {
+
+            if (catalogMatch != null) {
+                if (!userTouchedCategory) {
+                    category = when (catalogMatch.category) {
+                        com.moukim.shjirati.data.catalog.CatalogPlantCategory.TREE ->
+                            PlantCategory.TREE
+                        com.moukim.shjirati.data.catalog.CatalogPlantCategory.VEGETABLE,
+                        com.moukim.shjirati.data.catalog.CatalogPlantCategory.HERB ->
+                            PlantCategory.VEGETABLE
+                    }
+                }
+                if (!userTouchedFruitBearing && category == PlantCategory.TREE) {
+                    isFruitBearing = catalogMatch.dateMode ==
+                        com.moukim.shjirati.data.catalog.CatalogDateMode.HARVEST
+                }
+                if (!userTouchedIcon) {
+                    icon = recognized?.icon ?: PlantRecognitionEngine.FALLBACK_ICON
+                }
+            } else if (recognized != null) {
                 icon = recognized.icon
                 if (!userTouchedCategory) {
                     category = recognized.defaultCategory
