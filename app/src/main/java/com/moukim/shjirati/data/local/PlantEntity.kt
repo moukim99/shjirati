@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-enum class PlantCategory { TREE, VEGETABLE }
+enum class PlantCategory { TREE, VEGETABLE, HERB }
 
 @Entity(tableName = "plants", indices = [Index("category"), Index("name")])
 data class PlantEntity(
