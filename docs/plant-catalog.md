@@ -1,13 +1,15 @@
-Shjirati Offline Plant Catalog
+# Shjirati Offline Plant Catalog
 
 The catalog is intentionally separate from the user's Room plants table.
 
-- plant_catalog.json: bundled plant knowledge.
+- `plant_catalog.json`: bundled plant knowledge.
 - Room plants: plants created by the user.
 
-The catalog contains 100 common plants. Arabic is the primary language.
+The catalog now contains **200 curated plants**. Arabic is the primary language.
 
-GERMINATION is used for vegetables/herbs and HARVEST for fruiting trees in the starter model.
+- **TREE** entries use `HARVEST`.
+- **VEGETABLE** and **HERB** entries use `GERMINATION`.
+- The current practical categories are UX-oriented; they are not intended to be a strict botanical taxonomy.
 
 Each entry reserves one compressed WebP image path. Image files and attribution/license metadata are deliberately not fabricated; they will be added only after source verification.
 
@@ -16,5 +18,5 @@ Next steps:
 2. Add real WebP images.
 3. Add verified growing data.
 4. Connect catalog selection to the add-plant flow.
-5. Add automated catalog validation tests.
-6. Expand only when the UX demonstrates a need.
+5. Keep automated catalog validation tests in sync with the dataset.
+6. Review category semantics before introducing additional plant types.
